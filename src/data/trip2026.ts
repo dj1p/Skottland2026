@@ -133,7 +133,7 @@ export const trip2026: Trip = {
           description: 'Kortere men utfordrende linksbane. Små, vanskelige greens.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'afternoon',
-          teeTime: '*Kommer*', // Endre til f.eks. "13:30" når bekreftet
+          teeTime: '14:30 - ish', // Endre til f.eks. "13:30" når bekreftet
           websiteUrl: 'https://montrosegolflinks.com/',
           photos: [
             { src: '/images/montrose-broomfield-1.jpg', alt: 'Broomfield', caption: 'Broomfield Course' },
