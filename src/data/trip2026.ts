@@ -49,13 +49,24 @@ export const trip2026: Trip = {
       'Oppvarmet sommerhus med biljard',
     ],
     townDescription: 'Brechin er en historisk katedralby i Angus, nordøst i Skottland. Byen har en sjarmerende middelaldersk arkitektur med Brechin Cathedral fra 1100-tallet og det unike irsk-stilte rundtårnet fra år 1000. Byen ligger mellom Dundee og Aberdeen langs A90, med gode restauranter, puber og den berømte Caledonian Railway – en veteranjernbane som kjører om sommeren.',
+    // =========================================================================
+    // BILDER AV HUSET - Endre src og caption etter behov
+    // =========================================================================
+    photos: [
+      { src: '/images/home-entrance.jpg', alt: 'Airlie House', caption: 'Inngangspartiet' },
+      { src: '/images/home-kitchen.jpg', alt: 'Kjøkken', caption: 'Moderne kjøkken' },
+      { src: '/images/home-dining.jpg', alt: 'Spisestue', caption: 'Spisestue' },
+      { src: '/images/home-coffee.jpg', alt: 'Kaffehjørne', caption: 'Kaffehjørne' },
+    ],
   },
 
   // ===========================================================================
   // PROGRAM - DAG FOR DAG
   // ===========================================================================
   schedule: [
-    // TORSDAG 27. AUGUST
+    // =========================================================================
+    // TORSDAG 27. AUGUST - ANKOMST
+    // =========================================================================
     {
       date: '27',
       month: 'Aug',
@@ -75,7 +86,9 @@ export const trip2026: Trip = {
       },
     },
 
-    // FREDAG 28. AUGUST
+    // =========================================================================
+    // FREDAG 28. AUGUST - MONTROSE LINKS
+    // =========================================================================
     {
       date: '28',
       month: 'Aug',
@@ -97,6 +110,13 @@ export const trip2026: Trip = {
           description: 'En av verdens eldste golfbaner der golf har vært spilt siden 1562. Open Championship qualifying venue.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'morning',
+          teeTime: 'TBC', // Endre til f.eks. "08:30" når bekreftet
+          websiteUrl: 'https://montrosegolflinks.com/',
+          photos: [
+            { src: '/images/montrose1562---1.jpeg', alt: 'Montrose 1562', caption: 'Historisk links' },
+            { src: '/images/montrose1562---2.jpeg', alt: 'Montrose 1562', caption: 'Kystlinje' },
+            { src: '/images/montrose1562---3.jpeg', alt: 'Montrose 1562', caption: 'Fairway' },
+          ],
         },
         {
           name: 'Montrose Broomfield Course',
@@ -109,6 +129,13 @@ export const trip2026: Trip = {
           description: 'Kortere men utfordrende linksbane. Små, vanskelige greens.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'afternoon',
+          teeTime: 'TBC', // Endre til f.eks. "13:30" når bekreftet
+          websiteUrl: 'https://montrosegolflinks.com/',
+          photos: [
+            { src: '/images/montrose-broomfield-1.jpg', alt: 'Broomfield', caption: 'Broomfield Course' },
+            { src: '/images/montrose-broomfield-2.jpg', alt: 'Broomfield', caption: 'Utfordrende greens' },
+            { src: '/images/montrose-broomfield-3.jpg', alt: 'Broomfield', caption: 'Links terreng' },
+          ],
         },
       ],
       dinner: {
@@ -118,7 +145,9 @@ export const trip2026: Trip = {
       },
     },
 
-    // LØRDAG 29. AUGUST
+    // =========================================================================
+    // LØRDAG 29. AUGUST - BRECHIN GC
+    // =========================================================================
     {
       date: '29',
       month: 'Aug',
@@ -138,6 +167,12 @@ export const trip2026: Trip = {
           greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull',
           description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
           distanceFromHouse: '~5 min',
+          teeTime: 'TBC', // Endre til f.eks. "09:00" når bekreftet
+          websiteUrl: 'http://brechingolfclub.co.uk/',
+          photos: [
+            { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
+            { src: '/images/brechin2.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
+          ],
         },
       ],
       dinner: {
@@ -147,12 +182,14 @@ export const trip2026: Trip = {
       },
     },
 
-    // SØNDAG 30. AUGUST
+    // =========================================================================
+    // SØNDAG 30. AUGUST - FORFAR GC & HJEMREISE
+    // =========================================================================
     {
       date: '30',
       month: 'Aug',
       dayName: 'Søndag',
-      title: 'Newmachar & Hjemreise',
+      title: 'Forfar GC & Hjemreise',
       subtitle: '1 runde før fly tilbake til Stavanger',
       color: 'blue',
       activities: [
@@ -160,16 +197,22 @@ export const trip2026: Trip = {
       ],
       courses: [
         {
-          name: 'Newmachar GC – Hawkshill Course',
-          type: 'heathland',
-          par: 72,
-          yards: 6573,
-          established: 1990,
-          designer: 'Dave Thomas',
-          greenfee: '£60-80',
-          ranking: 'SSS 74',
-          description: 'Championship-bane designet av Dave Thomas. Sølvbjørk og skotsk furu langs smale fairways. Vannhinder på 7 hull gjør dette til en av de tøffeste testene i området. Har arrangert European Tour og Challenge Tour.',
-          distanceFromHouse: '~10 min fra Aberdeen Airport',
+          name: 'Forfar Golf Club',
+          type: 'parkland',
+          par: 69,
+          yards: 6052,
+          established: 1871,
+          designer: 'Old Tom Morris',
+          greenfee: '£45',
+          ranking: 'Første purpose-built 18-hulls bane',
+          description: 'Historisk bane designet av Old Tom Morris i 1871. En av Skottlands eldste 18-hulls baner, med vakker parkland-setting og utfordrende layout.',
+          distanceFromHouse: '~15 min',
+          teeTime: 'TBC', // Endre til f.eks. "09:00" når bekreftet
+          websiteUrl: 'https://www.forfargolfclub.co.uk/',
+          photos: [
+            { src: '/images/forfar1.jpg', alt: 'Forfar GC', caption: 'Old Tom Morris design' },
+            { src: '/images/forfar2.jpg', alt: 'Forfar GC', caption: 'Parkland klassiker' },
+          ],
         },
       ],
     },

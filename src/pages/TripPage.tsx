@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import { Trip, DaySchedule, GolfCourse } from '../data/types'
+import { Trip, DaySchedule, GolfCourse, Photo } from '../data/types'
 
 interface TripPageProps {
   trip: Trip
@@ -9,7 +8,9 @@ interface TripPageProps {
 export default function TripPage({ trip }: TripPageProps) {
   const [activeSection, setActiveSection] = useState('home')
   const [expandedDay, setExpandedDay] = useState<string | null>(null)
+  const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 100)
@@ -23,15 +24,50 @@ export default function TripPage({ trip }: TripPageProps) {
   }
 
   const colorClasses = {
-    amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', hover: 'hover:border-amber-500/30', text: 'text-amber-400', dinnerBorder: 'border-stone-600/30' },
-    emerald: { bg: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', hover: 'hover:border-emerald-500/30', text: 'text-emerald-400', dinnerBorder: 'border-emerald-800/30' },
-    rose: { bg: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', hover: 'hover:border-rose-500/30', text: 'text-rose-400', dinnerBorder: 'border-rose-800/30' },
-    blue: { bg: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', hover: 'hover:border-blue-500/30', text: 'text-blue-400', dinnerBorder: 'border-blue-800/30' },
-    stone: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', hover: 'hover:border-stone-500/30', text: 'text-stone-400', dinnerBorder: 'border-stone-600/30' },
+    amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-amber-400' },
+    emerald: { bg: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', text: 'text-emerald-400' },
+    rose: { bg: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', text: 'text-rose-400' },
+    blue: { bg: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', text: 'text-blue-400' },
+    stone: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-stone-400' },
   }
+
+  // Collect all course photos for the gallery
+  const allCoursePhotos: { course: string; photos: Photo[] }[] = []
+  trip.schedule.forEach(day => {
+    day.courses?.forEach(course => {
+      if (course.photos && course.photos.length > 0) {
+        allCoursePhotos.push({ course: course.name, photos: course.photos })
+      }
+    })
+  })
 
   return (
     <div className="min-h-screen bg-stone-900 text-stone-100">
+      {/* Lightbox */}
+      {lightboxPhoto && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button 
+            className="absolute top-4 right-4 text-white text-4xl hover:text-stone-300"
+            onClick={() => setLightboxPhoto(null)}
+          >
+            ×
+          </button>
+          <div className="max-w-5xl max-h-[90vh]">
+            <img 
+              src={lightboxPhoto.src} 
+              alt={lightboxPhoto.alt} 
+              className="max-h-[85vh] w-auto object-contain rounded-lg"
+            />
+            {lightboxPhoto.caption && (
+              <p className="text-center text-stone-300 mt-4">{lightboxPhoto.caption}</p>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
       <header className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-stone-900 to-amber-900 opacity-90"></div>
@@ -40,10 +76,6 @@ export default function TripPage({ trip }: TripPageProps) {
         }}></div>
 
         <div className="relative z-10 text-center px-6">
-          <Link to="/" className="inline-block mb-6 px-4 py-2 bg-stone-800/50 backdrop-blur-sm rounded-full text-stone-400 text-sm hover:text-stone-200 transition-colors">
-            ← Alle turer
-          </Link>
-          
           <div className="mb-6">
             <span className="inline-block px-4 py-2 bg-emerald-800/50 backdrop-blur-sm rounded-full text-emerald-300 text-sm tracking-widest uppercase">
               Årlig Golftur
@@ -81,17 +113,17 @@ export default function TripPage({ trip }: TripPageProps) {
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-stone-900/98 shadow-lg' : 'bg-stone-900/95'} backdrop-blur-md border-b border-stone-800`}>
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="text-emerald-400 font-medium tracking-wide hover:text-emerald-300 transition-colors">
-              🏌️ {trip.year}
-            </Link>
+            <span className="text-emerald-400 font-medium tracking-wide">
+              🏌️ {trip.title} {trip.year}
+            </span>
             <div className="flex gap-6 text-sm">
-              {['accommodation', 'schedule', 'courses', 'food'].map((id) => (
+              {['accommodation', 'schedule', 'photos', 'food'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
                   className="text-stone-400 hover:text-stone-200 transition-colors capitalize"
                 >
-                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'courses' ? 'Golfbaner' : 'Mat'}
+                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat'}
                 </button>
               ))}
             </div>
@@ -114,6 +146,30 @@ export default function TripPage({ trip }: TripPageProps) {
             <StatCard icon="🛏️" value={trip.accommodation.bedrooms.toString()} label="Soverom" />
             <StatCard icon="🛁" value={trip.accommodation.bathrooms.toString()} label="Bad" />
           </div>
+
+          {/* House Photos */}
+          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
+            <div className="mb-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {trip.accommodation.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div className="space-y-6">
@@ -164,66 +220,81 @@ export default function TripPage({ trip }: TripPageProps) {
               return (
                 <div
                   key={index}
-                  className={`bg-gradient-to-r ${colors.bg} rounded-3xl p-8 border ${colors.border} cursor-pointer ${colors.hover} transition-all`}
-                  onClick={() => setExpandedDay(isExpanded ? null : day.date)}
+                  className={`bg-gradient-to-r ${colors.bg} rounded-3xl border ${colors.border} overflow-hidden`}
                 >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-6">
-                      <div className="text-center">
-                        <div className={`text-3xl font-light ${colors.text}`}>{day.date}</div>
-                        <div className="text-stone-500 text-sm uppercase">{day.month}</div>
+                  {/* Day Header */}
+                  <div 
+                    className="p-8 cursor-pointer hover:bg-white/5 transition-colors"
+                    onClick={() => setExpandedDay(isExpanded ? null : day.date)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-6">
+                        <div className="text-center">
+                          <div className={`text-3xl font-light ${colors.text}`}>{day.date}</div>
+                          <div className="text-stone-500 text-sm uppercase">{day.month}</div>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-medium text-stone-100">{day.dayName} – {day.title}</h3>
+                          <p className="text-stone-400">{day.subtitle}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="text-xl font-medium text-stone-100">{day.dayName} – {day.title}</h3>
-                        <p className="text-stone-400">{day.subtitle}</p>
+                      <div className="flex items-center gap-3">
+                        {day.courses && day.courses.length > 0 && (
+                          <span className="px-3 py-1 bg-stone-700/50 text-stone-300 text-sm rounded-full capitalize">
+                            {day.courses.length} {day.courses.length === 1 ? 'runde' : 'runder'}
+                          </span>
+                        )}
+                        <svg className={`w-6 h-6 text-stone-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
                       </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {day.courses && day.courses.length > 0 && (
-                        <span className={`px-3 py-1 bg-${day.color}-800/50 text-${day.color}-300 text-sm rounded-full capitalize`}>
-                          {day.courses[0].type}
-                        </span>
-                      )}
-                      <svg className={`w-6 h-6 text-stone-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
                     </div>
                   </div>
 
+                  {/* Day Content */}
                   {isExpanded && (
-                    <div className={`mt-6 pt-6 border-t ${colors.dinnerBorder} space-y-4`}>
-                      {day.activities.map((activity, i) => (
-                        <div key={i} className="flex items-center gap-4">
-                          <span className="text-2xl">{activity.icon}</span>
-                          <div>
-                            <p className="text-stone-300">{activity.title}</p>
-                            {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
-                          </div>
-                        </div>
-                      ))}
-
-                      {day.courses && day.courses.length > 0 && (
-                        <div className="grid md:grid-cols-2 gap-6 pt-2">
-                          {day.courses.map((course, i) => (
-                            <div key={i} className="bg-stone-800/50 rounded-xl p-5">
-                              <div className="flex items-center gap-3 mb-3">
-                                <span className="text-lg">{course.timeOfDay === 'morning' ? '☀️' : course.timeOfDay === 'afternoon' ? '🌅' : '⛳'}</span>
-                                <span className="text-stone-300 font-medium">{course.timeOfDay === 'morning' ? 'Morgen' : course.timeOfDay === 'afternoon' ? 'Ettermiddag' : ''}</span>
+                    <div className="px-8 pb-8 border-t border-stone-700/30">
+                      {/* Activities */}
+                      {day.activities.length > 0 && (
+                        <div className="pt-6 space-y-4">
+                          {day.activities.map((activity, i) => (
+                            <div key={i} className="flex items-center gap-4">
+                              <span className="text-2xl">{activity.icon}</span>
+                              <div>
+                                <p className="text-stone-300">{activity.title}</p>
+                                {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
                               </div>
-                              <h4 className={`${colors.text} font-medium`}>{course.name}</h4>
-                              <p className="text-stone-400 text-sm mt-1">Par {course.par} • {course.yards} yards • {course.type}</p>
-                              {course.distanceFromHouse && <p className="text-stone-500 text-sm">{course.distanceFromHouse}</p>}
                             </div>
                           ))}
                         </div>
                       )}
 
+                      {/* Courses - Expandable */}
+                      {day.courses && day.courses.length > 0 && (
+                        <div className="pt-6 space-y-4">
+                          {day.courses.map((course, i) => (
+                            <CourseCard 
+                              key={i} 
+                              course={course} 
+                              isExpanded={expandedCourse === course.name}
+                              onToggle={() => setExpandedCourse(expandedCourse === course.name ? null : course.name)}
+                              onPhotoClick={setLightboxPhoto}
+                              color={day.color}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Dinner */}
                       {day.dinner && (
-                        <div className="flex items-center gap-4 pt-4">
-                          <span className="text-2xl">👨‍🍳</span>
-                          <div>
-                            <p className="text-stone-300 font-medium">Middag: {day.dinner.chefs.join(' & ')}</p>
-                            <p className="text-stone-500 text-sm">{day.dinner.description}</p>
+                        <div className="pt-6 mt-6 border-t border-stone-700/30">
+                          <div className="flex items-center gap-4">
+                            <span className="text-2xl">👨‍🍳</span>
+                            <div>
+                              <p className="text-stone-300 font-medium">Middag: {day.dinner.chefs.join(' & ')}</p>
+                              <p className="text-stone-400">{day.dinner.description}</p>
+                              {day.dinner.menu && <p className="text-stone-500 text-sm italic mt-1">{day.dinner.menu}</p>}
+                            </div>
                           </div>
                         </div>
                       )}
@@ -236,23 +307,63 @@ export default function TripPage({ trip }: TripPageProps) {
         </div>
       </section>
 
-      {/* Courses Section */}
-      <section id="courses" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+      {/* Photos Section */}
+      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-emerald-400 text-sm tracking-widest uppercase">Våre baner</span>
-            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Golfbanene</h2>
+            <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Bilder</h2>
           </div>
 
-          <div className="space-y-8">
-            {trip.schedule.filter(day => day.courses && day.courses.length > 0).map((day, dayIndex) => (
-              <div key={dayIndex}>
-                {day.courses!.map((course, courseIndex) => (
-                  <CourseCard key={courseIndex} course={course} day={day} />
+          {/* House Photos */}
+          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">🏠 {trip.accommodation.name}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {trip.accommodation.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
                 ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Course Photos */}
+          {allCoursePhotos.map((courseGroup, groupIndex) => (
+            <div key={groupIndex} className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">⛳ {courseGroup.course}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {courseGroup.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -300,11 +411,10 @@ export default function TripPage({ trip }: TripPageProps) {
             <div className="flex flex-wrap justify-center gap-4">
               <a href={trip.accommodation.airbnbUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg transition-colors text-sm">🏠 Airbnb</a>
               <a href={trip.accommodation.mapsUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg transition-colors text-sm">📍 Kart</a>
-              <Link to="/" className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg transition-colors text-sm">🏠 Alle turer</Link>
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-stone-800 text-center">
-            <p className="text-stone-600 text-sm">Arrangert med ❤️ for golfgutta</p>
+            <p className="text-stone-600 text-sm">Arrangert med ❤️</p>
           </div>
         </div>
       </footer>
@@ -312,14 +422,14 @@ export default function TripPage({ trip }: TripPageProps) {
   )
 }
 
-// Helper Components
+// =============================================================================
+// HELPER COMPONENTS
+// =============================================================================
+
 function StatBadge({ icon, value, label, color }: { icon: string; value: string; label: string; color: string }) {
-  const colorClass = color === 'emerald' ? 'text-emerald-400' : color === 'amber' ? 'text-amber-400' : 'text-rose-400'
   return (
     <div className="flex items-center gap-2 px-4 py-2 bg-stone-800/50 backdrop-blur-sm rounded-lg">
-      <svg className={`w-5 h-5 ${colorClass}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" strokeWidth={2} />
-      </svg>
+      <span className="text-lg">{icon}</span>
       <span className="text-stone-300">{value} {label}</span>
     </div>
   )
@@ -339,7 +449,6 @@ function ExternalLink({ href, icon, title, subtitle, color }: { href: string; ic
   const colorClasses = color === 'emerald' 
     ? 'from-stone-800 to-stone-700 border-stone-600/50 hover:border-emerald-500/50' 
     : 'from-rose-900/30 to-stone-800/50 border-rose-800/30 hover:border-rose-500/50'
-  const hoverColor = color === 'emerald' ? 'group-hover:text-emerald-400' : 'group-hover:text-rose-400'
   
   return (
     <a href={href} target="_blank" rel="noopener noreferrer" className={`block bg-gradient-to-br ${colorClasses} rounded-3xl p-8 border transition-all group`}>
@@ -348,7 +457,7 @@ function ExternalLink({ href, icon, title, subtitle, color }: { href: string; ic
           <h3 className="text-xl font-medium text-stone-100 mb-2">{icon} {title}</h3>
           <p className="text-stone-400">{subtitle}</p>
         </div>
-        <svg className={`w-6 h-6 text-stone-400 ${hoverColor} transition-colors`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="w-6 h-6 text-stone-400 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
         </svg>
       </div>
@@ -356,69 +465,148 @@ function ExternalLink({ href, icon, title, subtitle, color }: { href: string; ic
   )
 }
 
-function CourseCard({ course, day }: { course: GolfCourse; day: DaySchedule }) {
-  const typeColors = {
-    links: 'emerald',
-    parkland: 'amber', 
-    heathland: 'rose',
-    coastal: 'blue',
+// Course Card - Expandable
+function CourseCard({ 
+  course, 
+  isExpanded, 
+  onToggle, 
+  onPhotoClick,
+  color 
+}: { 
+  course: GolfCourse
+  isExpanded: boolean
+  onToggle: () => void
+  onPhotoClick: (photo: Photo) => void
+  color: string
+}) {
+  const colorMap: Record<string, { text: string; bg: string; border: string }> = {
+    amber: { text: 'text-amber-400', bg: 'bg-amber-900/20', border: 'border-amber-800/30' },
+    emerald: { text: 'text-emerald-400', bg: 'bg-emerald-900/20', border: 'border-emerald-800/30' },
+    rose: { text: 'text-rose-400', bg: 'bg-rose-900/20', border: 'border-rose-800/30' },
+    blue: { text: 'text-blue-400', bg: 'bg-blue-900/20', border: 'border-blue-800/30' },
+    stone: { text: 'text-stone-400', bg: 'bg-stone-900/20', border: 'border-stone-800/30' },
   }
-  const color = typeColors[course.type] || 'stone'
+  const colors = colorMap[color] || colorMap.stone
 
   return (
-    <div className="bg-gradient-to-br from-stone-800 to-stone-700/50 rounded-3xl overflow-hidden border border-stone-600/30 mb-6">
-      <div className="p-8">
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <span className={`px-3 py-1 bg-${color}-800/50 text-${color}-300 text-xs rounded-full uppercase tracking-wider`}>{course.type}</span>
-              <span className="px-3 py-1 bg-stone-700/50 text-stone-300 text-xs rounded-full uppercase tracking-wider">{day.dayName}</span>
+    <div className={`bg-stone-900/50 rounded-2xl border ${colors.border} overflow-hidden`}>
+      {/* Course Header - Clickable */}
+      <div 
+        className="p-5 cursor-pointer hover:bg-white/5 transition-colors"
+        onClick={onToggle}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-stone-800 rounded-xl flex items-center justify-center">
+              <span className="text-xl">{course.timeOfDay === 'morning' ? '☀️' : course.timeOfDay === 'afternoon' ? '🌅' : '⛳'}</span>
             </div>
-            <h3 className="text-2xl font-medium text-stone-100">{course.name}</h3>
-            <p className="text-stone-400">{course.distanceFromHouse}</p>
+            <div>
+              <h4 className={`${colors.text} font-medium`}>{course.name}</h4>
+              <div className="flex items-center gap-3 text-stone-400 text-sm mt-1">
+                <span className="capitalize">{course.type}</span>
+                <span>•</span>
+                <span>Par {course.par}</span>
+                <span>•</span>
+                <span>{course.yards} yards</span>
+              </div>
+            </div>
           </div>
-          {course.established && (
+          <div className="flex items-center gap-4">
+            {/* Tee Time */}
             <div className="text-right">
-              <div className={`text-${color}-400 text-3xl font-light`}>{course.established}</div>
-              <div className="text-stone-500 text-sm">{typeof course.established === 'number' && course.established < 1900 ? 'Etablert' : 'Åpnet'}</div>
-            </div>
-          )}
-        </div>
-
-        <div className="bg-stone-900/50 rounded-2xl p-6">
-          <div className="grid grid-cols-4 gap-4 mb-4">
-            <div className="text-center">
-              <div className="text-2xl font-light text-stone-100">{course.par}</div>
-              <div className="text-stone-500 text-xs">PAR</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-light text-stone-100">{course.yards}</div>
-              <div className="text-stone-500 text-xs">YARDS</div>
-            </div>
-            {course.greenfee && (
-              <div className="text-center">
-                <div className="text-2xl font-light text-stone-100">{course.greenfee}</div>
-                <div className="text-stone-500 text-xs">Greenfee</div>
+              <div className={`text-sm ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {course.teeTime || 'TBC'}
               </div>
-            )}
-            {course.ranking && (
-              <div className="text-center">
-                <div className="text-2xl font-light text-stone-100">{course.ranking}</div>
-                <div className="text-stone-500 text-xs">Ranking</div>
-              </div>
-            )}
+              <div className="text-stone-500 text-xs">Tee time</div>
+            </div>
+            <svg className={`w-5 h-5 text-stone-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
           </div>
-          <p className="text-stone-400 text-sm">{course.description}</p>
         </div>
-
-        {course.designer && (
-          <div className={`mt-6 p-4 bg-${color}-900/20 rounded-xl border border-${color}-800/30`}>
-            <p className={`text-${color}-300 text-sm`}>
-              <span className="font-medium">🏌️ Designer:</span> {course.designer}
-            </p>
-          </div>
-        )}
       </div>
+
+      {/* Course Details - Expanded */}
+      {isExpanded && (
+        <div className="px-5 pb-5 border-t border-stone-700/30">
+          <div className="pt-5 space-y-4">
+            {/* Description */}
+            <p className="text-stone-300">{course.description}</p>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {course.established && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className={`text-lg font-light ${colors.text}`}>{course.established}</div>
+                  <div className="text-stone-500 text-xs">Etablert</div>
+                </div>
+              )}
+              {course.greenfee && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.greenfee}</div>
+                  <div className="text-stone-500 text-xs">Greenfee</div>
+                </div>
+              )}
+              {course.ranking && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.ranking}</div>
+                  <div className="text-stone-500 text-xs">Ranking</div>
+                </div>
+              )}
+              {course.distanceFromHouse && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.distanceFromHouse}</div>
+                  <div className="text-stone-500 text-xs">Fra huset</div>
+                </div>
+              )}
+            </div>
+
+            {/* Designer */}
+            {course.designer && (
+              <div className={`p-4 ${colors.bg} rounded-xl border ${colors.border}`}>
+                <p className={`${colors.text} text-sm`}>
+                  <span className="font-medium">🏌️ Designer:</span> {course.designer}
+                </p>
+              </div>
+            )}
+
+            {/* Photos */}
+            {course.photos && course.photos.length > 0 && (
+              <div className="grid grid-cols-3 gap-2">
+                {course.photos.map((photo, i) => (
+                  <div 
+                    key={i}
+                    className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={(e) => { e.stopPropagation(); onPhotoClick(photo); }}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt}
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Website Link */}
+            {course.websiteUrl && (
+              <a 
+                href={course.websiteUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 ${colors.text} hover:underline text-sm`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span>🌐 Besøk nettsiden</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -426,15 +614,15 @@ function CourseCard({ course, day }: { course: GolfCourse; day: DaySchedule }) {
 function DinnerCard({ day }: { day: DaySchedule }) {
   if (!day.dinner) return null
   
-  const colorMap = {
-    amber: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', icon: '🍔', dinnerBorder: 'border-stone-700/50', text: 'text-amber-400' },
-    emerald: { gradient: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', icon: '🍽️', dinnerBorder: 'border-emerald-800/30', text: 'text-emerald-400' },
-    rose: { gradient: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', icon: '🍕', dinnerBorder: 'border-rose-800/30', text: 'text-rose-400' },
-    blue: { gradient: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', icon: '🍽️', dinnerBorder: 'border-blue-800/30', text: 'text-blue-400' },
-    stone: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', icon: '🍽️', dinnerBorder: 'border-stone-700/50', text: 'text-stone-400' },
+  const colorMap: Record<string, { gradient: string; border: string; text: string; icon: string }> = {
+    amber: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', text: 'text-amber-400', icon: '🍔' },
+    emerald: { gradient: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', text: 'text-emerald-400', icon: '🍽️' },
+    rose: { gradient: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', text: 'text-rose-400', icon: '🍕' },
+    blue: { gradient: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', text: 'text-blue-400', icon: '🍽️' },
+    stone: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', text: 'text-stone-400', icon: '🍽️' },
   }
   
-  const colors = colorMap[day.color]
+  const colors = colorMap[day.color] || colorMap.stone
 
   return (
     <div className={`bg-gradient-to-br ${colors.gradient} rounded-3xl p-8 border ${colors.border}`}>
@@ -442,14 +630,14 @@ function DinnerCard({ day }: { day: DaySchedule }) {
         <div className="w-12 h-12 bg-stone-900/50 rounded-xl flex items-center justify-center text-2xl">{colors.icon}</div>
         <div>
           <div className="text-stone-500 text-sm">{day.dayName} kveld</div>
-          <div className="text-stone-100 font-medium">{day.dinner.description.split(' ')[0]}...</div>
+          <div className="text-stone-100 font-medium">{day.title}</div>
         </div>
       </div>
       <div className="space-y-3">
         <p className="text-stone-300">{day.dinner.description}</p>
         {day.dinner.menu && <p className="text-stone-500 text-sm italic">{day.dinner.menu}</p>}
       </div>
-      <div className={`mt-6 pt-6 border-t ${colors.dinnerBorder}`}>
+      <div className="mt-6 pt-6 border-t border-stone-700/30">
         <div className={`flex items-center gap-2 ${colors.text}`}>
           <span>👨‍🍳</span>
           <span className="font-medium">Kokk{day.dinner.chefs.length > 1 ? 'er' : ''}: {day.dinner.chefs.join(' & ')}</span>

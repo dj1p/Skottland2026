@@ -2,6 +2,12 @@
 // TRIP DATA TYPES - Definer strukturen for turdata
 // =============================================================================
 
+export interface Photo {
+  src: string
+  alt: string
+  caption?: string
+}
+
 export interface GolfCourse {
   name: string
   type: 'links' | 'parkland' | 'heathland' | 'coastal'
@@ -14,6 +20,9 @@ export interface GolfCourse {
   description: string
   distanceFromHouse?: string
   timeOfDay?: 'morning' | 'afternoon'
+  teeTime?: string // e.g. "09:00" or "TBC"
+  websiteUrl?: string
+  photos?: Photo[]
 }
 
 export interface Activity {
@@ -58,6 +67,7 @@ export interface Accommodation {
   amenities: Amenity[]
   highlights: string[]
   townDescription: string
+  photos?: Photo[]
 }
 
 export interface Restaurant {
