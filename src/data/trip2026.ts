@@ -114,7 +114,7 @@ export const trip2026: Trip = {
           description: 'En av verdens eldste golfbaner der golf har vært spilt siden 1562. Open Championship qualifying venue.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'morning',
-          teeTime: '10:00', // Endre til f.eks. "08:30" når bekreftet
+          teeTime: 'Flight 1: 09:08 / Flight 2: 09:16', // Endre til f.eks. "08:30" når bekreftet
           websiteUrl: 'https://montrosegolflinks.com/',
           photos: [
             { src: '/images/montrose1562---1.jpeg', alt: 'Montrose 1562', caption: 'Historisk links' },
