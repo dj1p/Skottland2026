@@ -100,21 +100,21 @@ export default function TripPage({ trip }: TripPageProps) {
     })
   }
 
-const toggleCourse = (courseName: string) => {
-  const scrollY = window.scrollY
-  setExpandedCourse(expandedCourse === courseName ? null : courseName)
-  // Multiple restoration attempts to handle image loading and layout shifts
-  requestAnimationFrame(() => {
-    window.scrollTo(0, scrollY)
+  const toggleCourse = (courseName: string) => {
+    const scrollY = window.scrollY
+    setExpandedCourse(expandedCourse === courseName ? null : courseName)
+    // Multiple restoration attempts to handle image loading and layout shifts
     requestAnimationFrame(() => {
       window.scrollTo(0, scrollY)
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY)
+      })
     })
-  })
-  // Fallback for slower devices/image loading
-  setTimeout(() => {
-    window.scrollTo(0, scrollY)
-  }, 50)
-}
+    // Fallback for slower devices/image loading
+    setTimeout(() => {
+      window.scrollTo(0, scrollY)
+    }, 50)
+  }
 
   const colorClasses = {
     amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-amber-400' },
@@ -200,8 +200,6 @@ const toggleCourse = (courseName: string) => {
           backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px)`
         }}></div>
 
-        <div className="relative z-10 text-center px-6">
-
           
           <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-4">
             <span className="block text-stone-300">{trip.title}</span>
@@ -220,7 +218,21 @@ const toggleCourse = (courseName: string) => {
             <StatBadge icon="⛳" value={`${trip.info.rounds}`} label="runder" color="rose" />
           </div>
 
-          <div className="mt-16 animate-bounce">
+          {/* Whisky Logos */}
+          <div className="mt-16 space-y-6">
+            <img 
+              src="/images/whiskyFront.png" 
+              alt="Scottish Whisky" 
+              className="h-12 md:h-16 w-auto mx-auto opacity-60"
+            />
+            <img 
+              src="/images/whiskyBack.png" 
+              alt="Scottish Whisky" 
+              className="h-12 md:h-16 w-auto mx-auto opacity-60"
+            />
+          </div>
+
+          <div className="mt-12 animate-bounce">
             <button onClick={() => scrollToSection('accommodation')} className="text-stone-500 hover:text-stone-300 transition-colors">
               <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
