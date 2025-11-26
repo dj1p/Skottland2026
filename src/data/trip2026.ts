@@ -241,4 +241,14 @@ export const trip2026: Trip = {
   // ===========================================================================
   restaurants: [
 ],
+  // ===========================================================================
+  // KOSTNADER
+  // ===========================================================================
+  costs: [
+    { item: 'Overnatting (Airlie House)', amount: '5 213 NOK', note: '41 700 NOK / 8 personer' },
+    { item: 'Montrose Links (1562 + Broomfield)', amount: '£160', note: 'Per person' },
+    { item: 'Brechin GC (36 hull + buggy)', amount: '£110', note: '£70 golf + £40 buggy' },
+    { item: 'Forfar GC', amount: '£70', note: 'Per person' },
+  ],
+}
 }
