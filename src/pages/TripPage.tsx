@@ -247,13 +247,13 @@ export default function TripPage({ trip }: TripPageProps) {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-center h-14">
             <div className="flex gap-8 text-sm">
-              {['accommodation', 'schedule', 'photos', 'food'].map((id) => (
+              {['accommodation', 'schedule', 'photos', 'food', 'costs'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
                   className="text-stone-400 hover:text-stone-200 transition-colors"
                 >
-                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat'}
+                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat' : 'Kostnader'}
                 </button>
               ))}
             </div>
