@@ -201,11 +201,7 @@ const toggleCourse = (courseName: string) => {
         }}></div>
 
         <div className="relative z-10 text-center px-6">
-          <div className="mb-6">
-            <span className="inline-block px-4 py-2 bg-emerald-800/50 backdrop-blur-sm rounded-full text-emerald-300 text-sm tracking-widest uppercase">
-              Årlig Golftur
-            </span>
-          </div>
+
           
           <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-4">
             <span className="block text-stone-300">{trip.title}</span>
