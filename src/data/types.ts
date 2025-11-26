@@ -91,5 +91,6 @@ export interface Trip {
   accommodation: Accommodation
   schedule: DaySchedule[]
   restaurants: Restaurant[]
+    costs?: { item: string; amount: string; note?: string }[]
   isUpcoming: boolean
 }
