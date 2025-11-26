@@ -146,42 +146,50 @@ export const trip2026: Trip = {
     },
 
     // =========================================================================
-    // LØRDAG 29. AUGUST - BRECHIN GC
-    // =========================================================================
+// LØRDAG 29. AUGUST - BRECHIN GC
+{
+  date: '29',
+  month: 'Aug',
+  dayName: 'Lørdag',
+  title: 'Brechin GC',
+  subtitle: '2 runder • James Braid design fra 1926',
+  color: 'rose',
+  activities: [],
+  courses: [
     {
-      date: '29',
-      month: 'Aug',
-      dayName: 'Lørdag',
-      title: 'Brechin GC',
-      subtitle: '2 runder • James Braid design fra 1926',
-      color: 'rose',
-      activities: [],
-      courses: [
-        {
-          name: 'Brechin Golf Club',
-          type: 'parkland',
-          par: 72,
-          yards: 6096,
-          established: 1893,
-          designer: 'James Braid (1926)',
-          greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull',
-          description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
-          distanceFromHouse: '~5 min',
-          teeTime: 'TBC', // Endre til f.eks. "09:00" når bekreftet
-          websiteUrl: 'http://brechingolfclub.co.uk/',
-          photos: [
-            { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
-            { src: '/images/brechin2.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
-          ],
-        },
+      name: 'Brechin Golf Club',
+      type: 'parkland',
+      par: 72,
+      yards: 6096,
+      established: 1893,
+      designer: 'James Braid (1926)',
+      greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull',
+      description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
+      distanceFromHouse: '~5 min',
+      timeOfDay: 'morning',        // <-- ADD THIS
+      teeTime: 'TBC',
+      websiteUrl: 'http://brechingolfclub.co.uk/',
+      photos: [
+        { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
+        { src: '/images/brechin2.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
       ],
-      dinner: {
-        chefs: ['Klaus', 'Tor'],
-        description: 'Pizza-kveld!',
-        menu: 'Hjemmelaget pizza fra Ooni Karu 16 pizza-ovnen.',
-      },
     },
-
+    {
+      name: 'Brechin Golf Club (Runde 2)',   // <-- ADD THIS SECOND COURSE
+      type: 'parkland',
+      par: 72,
+      yards: 6096,
+      timeOfDay: 'afternoon',
+      teeTime: 'TBC',
+      description: 'Andre runde på Brechin - kanskje revansje?',
+      distanceFromHouse: '~5 min',
+      websiteUrl: 'http://brechingolfclub.co.uk/',
+    },
+  ],
+  dinner: {
+    // ... rest stays the same
+  },
+},
     // =========================================================================
     // SØNDAG 30. AUGUST - FORFAR GC & HJEMREISE
     // =========================================================================
