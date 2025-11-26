@@ -17,10 +17,10 @@ export default function HomePage() {
         <div className="relative z-10 text-center px-6">
           <div className="text-6xl mb-6">🏌️</div>
           <h1 className="text-5xl md:text-7xl font-light tracking-tight mb-4">
-            <span className="block text-stone-300">Golfturene</span>
+            <span className="block text-stone-300">Skottland 2026</span>
           </h1>
           <p className="text-xl text-stone-400 mt-4 font-light">
-            Årlig golftur med gutta
+            27. Aug - 30. Aug 2026
           </p>
         </div>
       </header>
@@ -53,28 +53,12 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Link to old 2025 site */}
-      <section className="py-12 bg-stone-950 border-t border-stone-800">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-stone-500 text-sm">
-            Ser du etter den gamle 2025-siden?{' '}
-            <a 
-              href="https://golf2025.austheim.app" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-emerald-400 hover:text-emerald-300 transition-colors"
-            >
-              golf2025.austheim.app →
-            </a>
-          </p>
-        </div>
-      </section>
 
       {/* Footer */}
       <footer className="py-8 bg-stone-950 border-t border-stone-800">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <p className="text-stone-600 text-sm">
-            Arrangert med ❤️ for golfgutta
+            Arrangert med ❤️
           </p>
         </div>
       </footer>
