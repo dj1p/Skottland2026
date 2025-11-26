@@ -177,6 +177,9 @@ export const trip2026: Trip = {
           photos: [
             { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
             { src: '/images/brechin2.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
+            { src: '/images/Brechin - 4.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
+                        { src: '/images/Brechin - 5.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
+                        { src: '/images/Brechin - 6.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
           ],
         },
         {
