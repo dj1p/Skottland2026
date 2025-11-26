@@ -253,7 +253,7 @@ export default function TripPage({ trip }: TripPageProps) {
                   onClick={() => scrollToSection(id)}
                   className="text-stone-400 hover:text-stone-200 transition-colors"
                 >
-                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat' : 'Kostnader'}
+{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : 'Kostnader'}
                 </button>
               ))}
             </div>
