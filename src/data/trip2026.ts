@@ -196,8 +196,8 @@ export const trip2026: Trip = {
       ],
       dinner: {
         chefs: ['Klaus', 'Tor'],
-        description: 'Pizza-kveld!',
-        menu: 'Hjemmelaget pizza fra pizza-ovnen.',
+        description: 'Pizzakveld!',
+        menu: 'Hjemmelaget pizza fra pizzaovnen.',
       },
     },
     // =========================================================================
