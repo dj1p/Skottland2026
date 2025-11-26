@@ -763,10 +763,9 @@ function DinnerCard({ day }: { day: DaySchedule }) {
     <div className={`bg-gradient-to-br ${colors.gradient} rounded-3xl p-8 border ${colors.border}`}>
       <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 bg-stone-900/50 rounded-xl flex items-center justify-center text-2xl">{colors.icon}</div>
-        <div>
-          <div className="text-stone-500 text-sm">{day.dayName} kveld</div>
-          <div className="text-stone-100 font-medium">{day.title}</div>
-        </div>
+<div>
+  <div className="text-stone-100 font-medium">{day.dayName} kveld</div>
+</div>
       </div>
       <div className="space-y-3">
         <p className="text-stone-300">{day.dinner.description}</p>
