@@ -112,16 +112,13 @@ export default function TripPage({ trip }: TripPageProps) {
       {/* Navigation */}
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-stone-900/98 shadow-lg' : 'bg-stone-900/95'} backdrop-blur-md border-b border-stone-800`}>
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-between h-16">
-            <span className="text-emerald-400 font-medium tracking-wide">
-              🏌️ {trip.title} {trip.year}
-            </span>
-            <div className="flex gap-6 text-sm">
+          <div className="flex items-center justify-center h-14">
+            <div className="flex gap-8 text-sm">
               {['accommodation', 'schedule', 'photos', 'food'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
-                  className="text-stone-400 hover:text-stone-200 transition-colors capitalize"
+                  className="text-stone-400 hover:text-stone-200 transition-colors"
                 >
                   {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat'}
                 </button>
@@ -492,36 +489,41 @@ function CourseCard({
     <div className={`bg-stone-900/50 rounded-2xl border ${colors.border} overflow-hidden`}>
       {/* Course Header - Clickable */}
       <div 
-        className="p-5 cursor-pointer hover:bg-white/5 transition-colors"
+        className="p-4 cursor-pointer hover:bg-white/5 transition-colors"
         onClick={onToggle}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-stone-800 rounded-xl flex items-center justify-center">
-              <span className="text-xl">{course.timeOfDay === 'morning' ? '☀️' : course.timeOfDay === 'afternoon' ? '🌅' : '⛳'}</span>
-            </div>
-            <div>
-              <h4 className={`${colors.text} font-medium`}>{course.name}</h4>
-              <div className="flex items-center gap-3 text-stone-400 text-sm mt-1">
-                <span className="capitalize">{course.type}</span>
-                <span>•</span>
-                <span>Par {course.par}</span>
-                <span>•</span>
-                <span>{course.yards} yards</span>
-              </div>
-            </div>
+        {/* Mobile-friendly layout */}
+        <div className="flex items-start gap-3">
+          {/* Icon */}
+          <div className="w-10 h-10 bg-stone-800 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-lg">{course.timeOfDay === 'morning' ? '☀️' : course.timeOfDay === 'afternoon' ? '🌅' : '⛳'}</span>
           </div>
-          <div className="flex items-center gap-4">
-            {/* Tee Time */}
-            <div className="text-right">
-              <div className={`text-sm ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
-                {course.teeTime || 'TBC'}
-              </div>
-              <div className="text-stone-500 text-xs">Tee time</div>
+          
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <h4 className={`${colors.text} font-medium leading-tight`}>{course.name}</h4>
+              <svg className={`w-5 h-5 text-stone-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
             </div>
-            <svg className={`w-5 h-5 text-stone-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
+            
+            {/* Course info row */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-stone-400 text-sm mt-1">
+              <span className="capitalize">{course.type}</span>
+              <span>•</span>
+              <span>Par {course.par}</span>
+              <span>•</span>
+              <span>{course.yards} yards</span>
+            </div>
+            
+            {/* Tee Time - on its own row for visibility */}
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-stone-500 text-xs">Tee time:</span>
+              <span className={`text-sm font-medium ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {course.teeTime || 'TBC'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
