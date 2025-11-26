@@ -57,6 +57,10 @@ export const trip2026: Trip = {
       { src: '/images/home-kitchen.jpg', alt: 'Kjøkken', caption: 'Kjøkken' },
       { src: '/images/home-dining.jpg', alt: 'Spisestue', caption: 'Spisestue' },
       { src: '/images/home-coffee.jpg', alt: 'Kaffehjørne', caption: 'Kaffehjørne' },
+            { src: '/images/Home - 5.png', alt: 'Hage', caption: 'Hage / Pitching Green' },
+            { src: '/images/Home - 6.png', alt: 'Jacuzzi', caption: 'Jacuzzi' },
+            { src: '/images/Home - 7.jpg', alt: 'Furtebu', caption: 'Furtebu etter 36 Double Bogey' },
+            { src: '/images/Home - 8.jpg', alt: 'Ute', caption: 'Ute' },
     ],
   },
 
