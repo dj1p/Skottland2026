@@ -237,9 +237,5 @@ export const trip2026: Trip = {
   // RESTAURANTER I BRECHIN
   // ===========================================================================
   restaurants: [
-    { name: 'The Hickory Restaurant', description: 'På Brechin Golf Club' },
-    { name: 'The Stables Lounge', description: 'Pub med god mat' },
-    { name: 'Shimla Indian Restaurant', description: 'Indisk kjøkken' },
-    { name: 'City Royal Bar', description: 'Tradisjonell pub' },
-  ],
+],
 }
