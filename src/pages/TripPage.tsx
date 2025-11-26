@@ -200,7 +200,7 @@ export default function TripPage({ trip }: TripPageProps) {
           backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px)`
         }}></div>
 
-          
+        <div className="relative z-10 text-center px-6">
           <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-4">
             <span className="block text-stone-300">{trip.title}</span>
             <span className="block text-5xl md:text-7xl mt-2 gradient-text font-medium">
