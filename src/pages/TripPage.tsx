@@ -100,13 +100,21 @@ export default function TripPage({ trip }: TripPageProps) {
     })
   }
 
-  const toggleCourse = (courseName: string) => {
-    const scrollY = window.scrollY
-    setExpandedCourse(expandedCourse === courseName ? null : courseName)
+const toggleCourse = (courseName: string) => {
+  const scrollY = window.scrollY
+  setExpandedCourse(expandedCourse === courseName ? null : courseName)
+  // Multiple restoration attempts to handle image loading and layout shifts
+  requestAnimationFrame(() => {
+    window.scrollTo(0, scrollY)
     requestAnimationFrame(() => {
       window.scrollTo(0, scrollY)
     })
-  }
+  })
+  // Fallback for slower devices/image loading
+  setTimeout(() => {
+    window.scrollTo(0, scrollY)
+  }, 50)
+}
 
   const colorClasses = {
     amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-amber-400' },
