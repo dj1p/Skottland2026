@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, TouchEvent } from 'react'
 import { Trip, DaySchedule, GolfCourse, Photo } from '../data/types'
 
 interface TripPageProps {
@@ -10,7 +10,74 @@ export default function TripPage({ trip }: TripPageProps) {
   const [expandedDay, setExpandedDay] = useState<string | null>(null)
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
-  const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [touchStart, setTouchStart] = useState<number | null>(null)
+
+  // Collect ALL photos into a single array for navigation
+  const allPhotos: Photo[] = []
+  
+  // Add house photos
+  if (trip.accommodation.photos) {
+    allPhotos.push(...trip.accommodation.photos)
+  }
+  
+  // Add course photos
+  trip.schedule.forEach(day => {
+    day.courses?.forEach(course => {
+      if (course.photos) {
+        allPhotos.push(...course.photos)
+      }
+    })
+  })
+
+  const openLightbox = useCallback((photo: Photo) => {
+    const index = allPhotos.findIndex(p => p.src === photo.src)
+    setLightboxIndex(index >= 0 ? index : 0)
+  }, [allPhotos])
+
+  const closeLightbox = useCallback(() => {
+    setLightboxIndex(null)
+  }, [])
+
+  const goToPrevious = useCallback(() => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex(lightboxIndex === 0 ? allPhotos.length - 1 : lightboxIndex - 1)
+    }
+  }, [lightboxIndex, allPhotos.length])
+
+  const goToNext = useCallback(() => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex(lightboxIndex === allPhotos.length - 1 ? 0 : lightboxIndex + 1)
+    }
+  }, [lightboxIndex, allPhotos.length])
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (lightboxIndex === null) return
+      if (e.key === 'ArrowLeft') goToPrevious()
+      if (e.key === 'ArrowRight') goToNext()
+      if (e.key === 'Escape') closeLightbox()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [lightboxIndex, goToPrevious, goToNext, closeLightbox])
+
+  // Touch swipe handlers
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStart === null) return
+    const touchEnd = e.changedTouches[0].clientX
+    const diff = touchStart - touchEnd
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToNext()
+      else goToPrevious()
+    }
+    setTouchStart(null)
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 100)
@@ -23,6 +90,32 @@ export default function TripPage({ trip }: TripPageProps) {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  // Toggle functions that preserve scroll position
+  const toggleDay = (dayDate: string) => {
+    const scrollY = window.scrollY
+    setExpandedDay(expandedDay === dayDate ? null : dayDate)
+    // Restore scroll position after state update
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+    })
+  }
+
+  const toggleCourse = (courseName: string) => {
+    const scrollY = window.scrollY
+    setExpandedCourse(expandedCourse === courseName ? null : courseName)
+    // Multiple restoration attempts to handle image loading and layout shifts
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+      requestAnimationFrame(() => {
+        window.scrollTo(0, scrollY)
+      })
+    })
+    // Fallback for slower devices/image loading
+    setTimeout(() => {
+      window.scrollTo(0, scrollY)
+    }, 50)
+  }
+
   const colorClasses = {
     amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-amber-400' },
     emerald: { bg: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', text: 'text-emerald-400' },
@@ -31,7 +124,7 @@ export default function TripPage({ trip }: TripPageProps) {
     stone: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-stone-400' },
   }
 
-  // Collect all course photos for the gallery
+  // Collect course photos for gallery section
   const allCoursePhotos: { course: string; photos: Photo[] }[] = []
   trip.schedule.forEach(day => {
     day.courses?.forEach(course => {
@@ -41,29 +134,61 @@ export default function TripPage({ trip }: TripPageProps) {
     })
   })
 
+  const currentPhoto = lightboxIndex !== null ? allPhotos[lightboxIndex] : null
+
   return (
     <div className="min-h-screen bg-stone-900 text-stone-100">
-      {/* Lightbox */}
-      {lightboxPhoto && (
+      {/* Lightbox with navigation */}
+      {currentPhoto && (
         <div 
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setLightboxPhoto(null)}
+          className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
+          onClick={closeLightbox}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
+          {/* Close button */}
           <button 
-            className="absolute top-4 right-4 text-white text-4xl hover:text-stone-300"
-            onClick={() => setLightboxPhoto(null)}
+            className="absolute top-4 right-4 text-white text-4xl hover:text-stone-300 z-10 w-12 h-12 flex items-center justify-center"
+            onClick={closeLightbox}
           >
             ×
           </button>
-          <div className="max-w-5xl max-h-[90vh]">
+
+          {/* Previous button */}
+          <button
+            className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 text-white hover:text-stone-300 z-10 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full"
+            onClick={(e) => { e.stopPropagation(); goToPrevious() }}
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Next button */}
+          <button
+            className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white hover:text-stone-300 z-10 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full"
+            onClick={(e) => { e.stopPropagation(); goToNext() }}
+          >
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          {/* Image */}
+          <div className="max-w-5xl max-h-[90vh] px-16" onClick={(e) => e.stopPropagation()}>
             <img 
-              src={lightboxPhoto.src} 
-              alt={lightboxPhoto.alt} 
-              className="max-h-[85vh] w-auto object-contain rounded-lg"
+              src={currentPhoto.src} 
+              alt={currentPhoto.alt} 
+              className="max-h-[80vh] w-auto object-contain rounded-lg mx-auto"
             />
-            {lightboxPhoto.caption && (
-              <p className="text-center text-stone-300 mt-4">{lightboxPhoto.caption}</p>
-            )}
+            <div className="text-center mt-4">
+              {currentPhoto.caption && (
+                <p className="text-stone-300">{currentPhoto.caption}</p>
+              )}
+              <p className="text-stone-500 text-sm mt-2">
+                {lightboxIndex! + 1} / {allPhotos.length}
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -99,7 +224,21 @@ export default function TripPage({ trip }: TripPageProps) {
             <StatBadge icon="⛳" value={`${trip.info.rounds}`} label="runder" color="rose" />
           </div>
 
-          <div className="mt-16 animate-bounce">
+          {/* Whisky Logos */}
+          <div className="mt-16 space-y-6">
+            <img 
+              src="/images/whiskyFront.png" 
+              alt="Scottish Whisky" 
+              className="h-12 md:h-16 w-auto mx-auto opacity-60"
+            />
+            <img 
+              src="/images/whiskyBack.png" 
+              alt="Scottish Whisky" 
+              className="h-12 md:h-16 w-auto mx-auto opacity-60"
+            />
+          </div>
+
+          <div className="mt-12 animate-bounce">
             <button onClick={() => scrollToSection('accommodation')} className="text-stone-500 hover:text-stone-300 transition-colors">
               <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
@@ -152,7 +291,7 @@ export default function TripPage({ trip }: TripPageProps) {
                   <div 
                     key={i} 
                     className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => setLightboxPhoto(photo)}
+                    onClick={() => openLightbox(photo)}
                   >
                     <img 
                       src={photo.src} 
@@ -222,7 +361,7 @@ export default function TripPage({ trip }: TripPageProps) {
                   {/* Day Header */}
                   <div 
                     className="p-8 cursor-pointer hover:bg-white/5 transition-colors"
-                    onClick={() => setExpandedDay(isExpanded ? null : day.date)}
+                    onClick={() => toggleDay(day.date)}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-6">
@@ -274,8 +413,8 @@ export default function TripPage({ trip }: TripPageProps) {
                               key={i} 
                               course={course} 
                               isExpanded={expandedCourse === course.name}
-                              onToggle={() => setExpandedCourse(expandedCourse === course.name ? null : course.name)}
-                              onPhotoClick={setLightboxPhoto}
+                              onToggle={() => toggleCourse(course.name)}
+                              onPhotoClick={openLightbox}
                               color={day.color}
                             />
                           ))}
@@ -321,7 +460,7 @@ export default function TripPage({ trip }: TripPageProps) {
                   <div 
                     key={i} 
                     className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => setLightboxPhoto(photo)}
+                    onClick={() => openLightbox(photo)}
                   >
                     <img 
                       src={photo.src} 
@@ -346,7 +485,7 @@ export default function TripPage({ trip }: TripPageProps) {
                   <div 
                     key={i} 
                     className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => setLightboxPhoto(photo)}
+                    onClick={() => openLightbox(photo)}
                   >
                     <img 
                       src={photo.src} 
