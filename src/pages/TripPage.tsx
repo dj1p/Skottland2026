@@ -529,7 +529,48 @@ export default function TripPage({ trip }: TripPageProps) {
           )}
         </div>
       </section>
+{/* Costs Section */}
+      {trip.costs && trip.costs.length > 0 && (
+        <section id="costs" className="py-24 bg-stone-800">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-amber-400 text-sm tracking-widest uppercase">Økonomi</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Kostnader</h2>
+              <p className="text-stone-400 mt-4">Pris per person</p>
+            </div>
 
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-stone-900/50 rounded-3xl border border-stone-700/50 overflow-hidden">
+                {trip.costs.map((cost, i) => (
+                  <div 
+                    key={i} 
+                    className={`flex items-center justify-between p-6 ${i !== trip.costs!.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+                  >
+                    <div>
+                      <p className="text-stone-100 font-medium">{cost.item}</p>
+                      {cost.note && <p className="text-stone-500 text-sm">{cost.note}</p>}
+                    </div>
+                    <div className="text-emerald-400 font-semibold text-lg">{cost.amount}</div>
+                  </div>
+                ))}
+                
+                {/* Total */}
+                <div className="bg-emerald-900/30 p-6 border-t border-emerald-800/30">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-stone-100 font-medium">Totalt estimat</p>
+                      <p className="text-stone-500 text-sm">Golf: £340 + Hus: 5 213 NOK</p>
+                    </div>
+                    <div className="text-emerald-400 font-bold text-xl">~9 500 NOK</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Footer */}
       {/* Footer */}
       <footer className="py-12 bg-stone-950 border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-6">
