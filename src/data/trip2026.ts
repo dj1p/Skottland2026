@@ -36,14 +36,14 @@ export const trip2026: Trip = {
     amenities: [
       { icon: '🔥', name: 'Vedovn' },
       { icon: '🎬', name: 'Kino/TV-rom' },
-      { icon: '🍕', name: 'Ooni Pizza-ovn' },
+      { icon: '🍕', name: 'Pizza-ovn' },
       { icon: '🛁', name: 'Boblebad (6 pers)' },
       { icon: '🎱', name: 'Biljard' },
       { icon: '🎯', name: 'Dart' },
       { icon: '🏓', name: 'Bordtennis' },
     ],
     highlights: [
-      '8 romslige soverom med vakker utsikt',
+      '8 romslige soverom med utsikt',
       'Ett soverom på bakkeplan med tilgjengelig bad',
       'Landskapsformet hage med utendørs spiseplass',
       'Oppvarmet sommerhus med biljard',
@@ -54,7 +54,7 @@ export const trip2026: Trip = {
     // =========================================================================
     photos: [
       { src: '/images/home-entrance.jpg', alt: 'Airlie House', caption: 'Inngangspartiet' },
-      { src: '/images/home-kitchen.jpg', alt: 'Kjøkken', caption: 'Moderne kjøkken' },
+      { src: '/images/home-kitchen.jpg', alt: 'Kjøkken', caption: 'Kjøkken' },
       { src: '/images/home-dining.jpg', alt: 'Spisestue', caption: 'Spisestue' },
       { src: '/images/home-coffee.jpg', alt: 'Kaffehjørne', caption: 'Kaffehjørne' },
     ],
@@ -75,8 +75,8 @@ export const trip2026: Trip = {
       subtitle: 'Fly til Aberdeen • Innsjekking • Middag',
       color: 'amber',
       activities: [
-        { icon: '✈️', title: 'Fly fra Stavanger til Aberdeen', description: 'SK 4615 - SVG-ABZ - Avgang 1805 - Ankomst 1810' },
-        { icon: '🚗', title: 'Kjør til Brechin (~55 minutter)', description: 'Vi blir plukket opp på flyplassen, for å høyne utfordringen fra ifjor så har jeg bestilt en Nissan Micra' },
+        { icon: '✈️', title: 'Fly - Stavanger til Aberdeen', description: 'SK 4615 - SVG-ABZ - Avgang 1805 - Ankomst 1810' },
+        { icon: '🚗', title: 'Kjøretur til Brechin (~55 minutter)', description: 'Vi blir plukket opp på flyplassen, for å høyne utfordringen fra ifjor så har jeg bestilt en Nissan Micra' },
         { icon: '🏠', title: 'Innsjekking Airlie House' },
       ],
       dinner: {
@@ -106,11 +106,11 @@ export const trip2026: Trip = {
           established: 1562,
           designer: 'Old Tom Morris, Willie Park Jr., Harry Colt',
           ranking: '#43 Scotland',
-          greenfee: '£130 - Buggy: £35',
+          greenfee: '£130 - Buggy: £35 - Golfamore hverdager',
           description: 'En av verdens eldste golfbaner der golf har vært spilt siden 1562. Open Championship qualifying venue.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'morning',
-          teeTime: 'TBC', // Endre til f.eks. "08:30" når bekreftet
+          teeTime: '*Kommer*', // Endre til f.eks. "08:30" når bekreftet
           websiteUrl: 'https://montrosegolflinks.com/',
           photos: [
             { src: '/images/montrose1562---1.jpeg', alt: 'Montrose 1562', caption: 'Historisk links' },
@@ -125,11 +125,11 @@ export const trip2026: Trip = {
           yards: 4822,
           established: 1915,
           designer: 'Harry Colt',
-          greenfee: '£30 - Buggy: £35',
+          greenfee: '£30 - Buggy: £35 - Golfamore hverdager',
           description: 'Kortere men utfordrende linksbane. Små, vanskelige greens.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'afternoon',
-          teeTime: 'TBC', // Endre til f.eks. "13:30" når bekreftet
+          teeTime: '*Kommer*', // Endre til f.eks. "13:30" når bekreftet
           websiteUrl: 'https://montrosegolflinks.com/',
           photos: [
             { src: '/images/montrose-broomfield-1.jpg', alt: 'Broomfield', caption: 'Broomfield Course' },
@@ -141,7 +141,7 @@ export const trip2026: Trip = {
       dinner: {
         chefs: ['Truls', 'Roar'],
         description: 'Meny avsløres nærmere turen!',
-        menu: 'Etter 36 hull på Montrose Links fortjener vi noe spesielt.',
+        menu: 'Etter 36 hull på Montrose Links fortjener vi noe spesielt. Truls or Roar disker opp.',
       },
     },
 
@@ -164,11 +164,11 @@ export const trip2026: Trip = {
           yards: 6096,
           established: 1893,
           designer: 'James Braid (1926)',
-          greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull',
+          greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull - Ikke Golfamore i Helg',
           description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
           distanceFromHouse: '~5 min',
           timeOfDay: 'morning',
-          teeTime: 'TBC',
+          teeTime: '*Kommer*',
           websiteUrl: 'http://brechingolfclub.co.uk/',
           photos: [
             { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
@@ -180,17 +180,17 @@ export const trip2026: Trip = {
           type: 'parkland',
           par: 72,
           yards: 6096,
-          description: 'Andre runde på Brechin - kanskje revansje?',
+          description: 'Andre runde på Brechin - kanskje revansje? Kanskje scramble?',
           distanceFromHouse: '~5 min',
           timeOfDay: 'afternoon',
-          teeTime: 'TBC',
+          teeTime: '*Kommer*',
           websiteUrl: 'http://brechingolfclub.co.uk/',
         },
       ],
       dinner: {
         chefs: ['Klaus', 'Tor'],
         description: 'Pizza-kveld!',
-        menu: 'Hjemmelaget pizza fra Ooni Karu 16 pizza-ovnen.',
+        menu: 'Hjemmelaget pizza fra pizza-ovnen.',
       },
     },
     // =========================================================================
@@ -214,7 +214,7 @@ export const trip2026: Trip = {
           yards: 6052,
           established: 1871,
           designer: 'Old Tom Morris',
-          greenfee: '£45',
+          greenfee: '£45 - Ikke golfamore helg',
           ranking: 'Første purpose-built 18-hulls bane',
           description: 'Historisk bane designet av Old Tom Morris i 1871. En av Skottlands eldste 18-hulls baner, med vakker parkland-setting og utfordrende layout.',
           distanceFromHouse: '~15 min',
