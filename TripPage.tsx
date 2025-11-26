@@ -1,0 +1,650 @@
+import { useState, useEffect } from 'react'
+import { Trip, DaySchedule, GolfCourse, Photo } from '../data/types'
+
+interface TripPageProps {
+  trip: Trip
+}
+
+export default function TripPage({ trip }: TripPageProps) {
+  const [activeSection, setActiveSection] = useState('home')
+  const [expandedDay, setExpandedDay] = useState<string | null>(null)
+  const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
+  const [scrolled, setScrolled] = useState(false)
+  const [lightboxPhoto, setLightboxPhoto] = useState<Photo | null>(null)
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 100)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const scrollToSection = (sectionId: string) => {
+    setActiveSection(sectionId)
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const colorClasses = {
+    amber: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-amber-400' },
+    emerald: { bg: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', text: 'text-emerald-400' },
+    rose: { bg: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', text: 'text-rose-400' },
+    blue: { bg: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', text: 'text-blue-400' },
+    stone: { bg: 'from-stone-700/50 to-stone-800/50', border: 'border-stone-600/30', text: 'text-stone-400' },
+  }
+
+  // Collect all course photos for the gallery
+  const allCoursePhotos: { course: string; photos: Photo[] }[] = []
+  trip.schedule.forEach(day => {
+    day.courses?.forEach(course => {
+      if (course.photos && course.photos.length > 0) {
+        allCoursePhotos.push({ course: course.name, photos: course.photos })
+      }
+    })
+  })
+
+  return (
+    <div className="min-h-screen bg-stone-900 text-stone-100">
+      {/* Lightbox */}
+      {lightboxPhoto && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setLightboxPhoto(null)}
+        >
+          <button 
+            className="absolute top-4 right-4 text-white text-4xl hover:text-stone-300"
+            onClick={() => setLightboxPhoto(null)}
+          >
+            ×
+          </button>
+          <div className="max-w-5xl max-h-[90vh]">
+            <img 
+              src={lightboxPhoto.src} 
+              alt={lightboxPhoto.alt} 
+              className="max-h-[85vh] w-auto object-contain rounded-lg"
+            />
+            {lightboxPhoto.caption && (
+              <p className="text-center text-stone-300 mt-4">{lightboxPhoto.caption}</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Hero */}
+      <header className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-900 via-stone-900 to-amber-900 opacity-90"></div>
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px), repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(255,255,255,0.1) 20px, rgba(255,255,255,0.1) 21px)`
+        }}></div>
+
+        <div className="relative z-10 text-center px-6">
+          <div className="mb-6">
+            <span className="inline-block px-4 py-2 bg-emerald-800/50 backdrop-blur-sm rounded-full text-emerald-300 text-sm tracking-widest uppercase">
+              Årlig Golftur
+            </span>
+          </div>
+          
+          <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-4">
+            <span className="block text-stone-300">{trip.title}</span>
+            <span className="block text-5xl md:text-7xl mt-2 gradient-text font-medium">
+              {trip.year}
+            </span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-stone-400 mt-8 font-light tracking-wide">
+            {trip.info.dates} • {trip.location}
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
+            <StatBadge icon="👥" value={`${trip.info.golfers}`} label="golfere" color="emerald" />
+            <StatBadge icon="📅" value={`${trip.info.days}`} label="dager" color="amber" />
+            <StatBadge icon="⛳" value={`${trip.info.rounds}`} label="runder" color="rose" />
+          </div>
+
+          <div className="mt-16 animate-bounce">
+            <button onClick={() => scrollToSection('accommodation')} className="text-stone-500 hover:text-stone-300 transition-colors">
+              <svg className="w-8 h-8 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Navigation */}
+      <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-stone-900/98 shadow-lg' : 'bg-stone-900/95'} backdrop-blur-md border-b border-stone-800`}>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-center h-14">
+            <div className="flex gap-8 text-sm">
+              {['accommodation', 'schedule', 'photos', 'food'].map((id) => (
+                <button
+                  key={id}
+                  onClick={() => scrollToSection(id)}
+                  className="text-stone-400 hover:text-stone-200 transition-colors"
+                >
+                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat'}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Accommodation Section */}
+      <section id="accommodation" className="py-24 bg-gradient-to-b from-stone-900 to-stone-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-emerald-400 text-sm tracking-widest uppercase">Vår Base</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">{trip.accommodation.name}</h2>
+            <p className="text-stone-400 mt-4 text-lg">{trip.accommodation.location}</p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <StatCard icon="🚗" value={trip.accommodation.distanceFromAirport} label="Fra Aberdeen Airport" />
+            <StatCard icon="⭐" value={trip.accommodation.rating.toString()} label="Airbnb Rating" />
+            <StatCard icon="🛏️" value={trip.accommodation.bedrooms.toString()} label="Soverom" />
+            <StatCard icon="🛁" value={trip.accommodation.bathrooms.toString()} label="Bad" />
+          </div>
+
+          {/* House Photos */}
+          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
+            <div className="mb-12">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {trip.accommodation.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="grid md:grid-cols-2 gap-12 items-start">
+            <div className="space-y-6">
+              <div className="bg-gradient-to-br from-emerald-900/30 to-stone-800/50 rounded-3xl p-8 border border-emerald-800/30">
+                <h3 className="text-xl font-medium text-emerald-400 mb-4">Om Huset</h3>
+                <p className="text-stone-300 leading-relaxed">{trip.accommodation.description}</p>
+              </div>
+
+              <div className="bg-stone-800/50 rounded-3xl p-8 border border-stone-700/50">
+                <h3 className="text-xl font-medium text-amber-400 mb-4">Fasiliteter</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {trip.accommodation.amenities.map((item, i) => (
+                    <div key={i} className="flex items-center gap-3 text-stone-300">
+                      <span className="text-xl">{item.icon}</span>
+                      <span>{item.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <ExternalLink href={trip.accommodation.mapsUrl} icon="📍" title={trip.location.split(',')[0]} subtitle="Se lokasjon på Google Maps" color="emerald" />
+              <ExternalLink href={trip.accommodation.airbnbUrl} icon="🏠" title="Se på Airbnb" subtitle="Alle bilder og detaljer" color="rose" />
+              
+              <div className="bg-stone-800/50 rounded-3xl p-8 border border-stone-700/50">
+                <h3 className="text-xl font-medium text-emerald-400 mb-4">Om Byen</h3>
+                <p className="text-stone-300 leading-relaxed">{trip.accommodation.townDescription}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Schedule Section */}
+      <section id="schedule" className="py-24 bg-stone-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-amber-400 text-sm tracking-widest uppercase">Dag for dag</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Program</h2>
+          </div>
+
+          <div className="space-y-6">
+            {trip.schedule.map((day, index) => {
+              const colors = colorClasses[day.color]
+              const isExpanded = expandedDay === day.date
+              
+              return (
+                <div
+                  key={index}
+                  className={`bg-gradient-to-r ${colors.bg} rounded-3xl border ${colors.border} overflow-hidden`}
+                >
+                  {/* Day Header */}
+                  <div 
+                    className="p-8 cursor-pointer hover:bg-white/5 transition-colors"
+                    onClick={() => setExpandedDay(isExpanded ? null : day.date)}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-6">
+                        <div className="text-center">
+                          <div className={`text-3xl font-light ${colors.text}`}>{day.date}</div>
+                          <div className="text-stone-500 text-sm uppercase">{day.month}</div>
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-medium text-stone-100">{day.dayName} – {day.title}</h3>
+                          <p className="text-stone-400">{day.subtitle}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {day.courses && day.courses.length > 0 && (
+                          <span className="px-3 py-1 bg-stone-700/50 text-stone-300 text-sm rounded-full capitalize">
+                            {day.courses.length} {day.courses.length === 1 ? 'runde' : 'runder'}
+                          </span>
+                        )}
+                        <svg className={`w-6 h-6 text-stone-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Day Content */}
+                  {isExpanded && (
+                    <div className="px-8 pb-8 border-t border-stone-700/30">
+                      {/* Activities */}
+                      {day.activities.length > 0 && (
+                        <div className="pt-6 space-y-4">
+                          {day.activities.map((activity, i) => (
+                            <div key={i} className="flex items-center gap-4">
+                              <span className="text-2xl">{activity.icon}</span>
+                              <div>
+                                <p className="text-stone-300">{activity.title}</p>
+                                {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Courses - Expandable */}
+                      {day.courses && day.courses.length > 0 && (
+                        <div className="pt-6 space-y-4">
+                          {day.courses.map((course, i) => (
+                            <CourseCard 
+                              key={i} 
+                              course={course} 
+                              isExpanded={expandedCourse === course.name}
+                              onToggle={() => setExpandedCourse(expandedCourse === course.name ? null : course.name)}
+                              onPhotoClick={setLightboxPhoto}
+                              color={day.color}
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Dinner */}
+                      {day.dinner && (
+                        <div className="pt-6 mt-6 border-t border-stone-700/30">
+                          <div className="flex items-center gap-4">
+                            <span className="text-2xl">👨‍🍳</span>
+                            <div>
+                              <p className="text-stone-300 font-medium">Middag: {day.dinner.chefs.join(' & ')}</p>
+                              <p className="text-stone-400">{day.dinner.description}</p>
+                              {day.dinner.menu && <p className="text-stone-500 text-sm italic mt-1">{day.dinner.menu}</p>}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Photos Section */}
+      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Bilder</h2>
+          </div>
+
+          {/* House Photos */}
+          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">🏠 {trip.accommodation.name}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {trip.accommodation.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Course Photos */}
+          {allCoursePhotos.map((courseGroup, groupIndex) => (
+            <div key={groupIndex} className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">⛳ {courseGroup.course}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {courseGroup.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => setLightboxPhoto(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Food Section */}
+      <section id="food" className="py-24 bg-stone-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-rose-400 text-sm tracking-widest uppercase">Kulinarisk</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Mat & Drikke</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {trip.schedule.filter(day => day.dinner).map((day, index) => (
+              <DinnerCard key={index} day={day} />
+            ))}
+          </div>
+
+          {trip.restaurants.length > 0 && (
+            <div className="mt-12 bg-stone-800/50 rounded-3xl p-8 border border-stone-700/50">
+              <h3 className="text-xl font-medium text-stone-100 mb-4">🍻 Restauranter i området</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {trip.restaurants.map((restaurant, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="text-amber-400">•</span>
+                    <div>
+                      <span className="text-stone-300">{restaurant.name}</span>
+                      <span className="text-stone-500 text-sm block">{restaurant.description}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-stone-950 border-t border-stone-800">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <h3 className="text-xl font-medium text-stone-100">🏌️ {trip.title} {trip.year}</h3>
+              <p className="text-stone-500 mt-1">{trip.info.dates} • {trip.location}</p>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href={trip.accommodation.airbnbUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg transition-colors text-sm">🏠 Airbnb</a>
+              <a href={trip.accommodation.mapsUrl} target="_blank" rel="noopener noreferrer" className="px-4 py-2 bg-stone-800 hover:bg-stone-700 text-stone-300 rounded-lg transition-colors text-sm">📍 Kart</a>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-stone-800 text-center">
+            <p className="text-stone-600 text-sm">Arrangert med ❤️</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
+// =============================================================================
+// HELPER COMPONENTS
+// =============================================================================
+
+function StatBadge({ icon, value, label, color }: { icon: string; value: string; label: string; color: string }) {
+  return (
+    <div className="flex items-center gap-2 px-4 py-2 bg-stone-800/50 backdrop-blur-sm rounded-lg">
+      <span className="text-lg">{icon}</span>
+      <span className="text-stone-300">{value} {label}</span>
+    </div>
+  )
+}
+
+function StatCard({ icon, value, label }: { icon: string; value: string; label: string }) {
+  return (
+    <div className="bg-stone-800/50 rounded-2xl p-6 text-center border border-stone-700/50">
+      <span className="text-3xl">{icon}</span>
+      <div className="text-2xl font-semibold text-stone-100 mt-2">{value}</div>
+      <div className="text-stone-500 text-sm">{label}</div>
+    </div>
+  )
+}
+
+function ExternalLink({ href, icon, title, subtitle, color }: { href: string; icon: string; title: string; subtitle: string; color: string }) {
+  const colorClasses = color === 'emerald' 
+    ? 'from-stone-800 to-stone-700 border-stone-600/50 hover:border-emerald-500/50' 
+    : 'from-rose-900/30 to-stone-800/50 border-rose-800/30 hover:border-rose-500/50'
+  
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={`block bg-gradient-to-br ${colorClasses} rounded-3xl p-8 border transition-all group`}>
+      <div className="flex items-center justify-between">
+        <div>
+          <h3 className="text-xl font-medium text-stone-100 mb-2">{icon} {title}</h3>
+          <p className="text-stone-400">{subtitle}</p>
+        </div>
+        <svg className="w-6 h-6 text-stone-400 group-hover:text-emerald-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </div>
+    </a>
+  )
+}
+
+// Course Card - Expandable
+function CourseCard({ 
+  course, 
+  isExpanded, 
+  onToggle, 
+  onPhotoClick,
+  color 
+}: { 
+  course: GolfCourse
+  isExpanded: boolean
+  onToggle: () => void
+  onPhotoClick: (photo: Photo) => void
+  color: string
+}) {
+  const colorMap: Record<string, { text: string; bg: string; border: string }> = {
+    amber: { text: 'text-amber-400', bg: 'bg-amber-900/20', border: 'border-amber-800/30' },
+    emerald: { text: 'text-emerald-400', bg: 'bg-emerald-900/20', border: 'border-emerald-800/30' },
+    rose: { text: 'text-rose-400', bg: 'bg-rose-900/20', border: 'border-rose-800/30' },
+    blue: { text: 'text-blue-400', bg: 'bg-blue-900/20', border: 'border-blue-800/30' },
+    stone: { text: 'text-stone-400', bg: 'bg-stone-900/20', border: 'border-stone-800/30' },
+  }
+  const colors = colorMap[color] || colorMap.stone
+
+  return (
+    <div className={`bg-stone-900/50 rounded-2xl border ${colors.border} overflow-hidden`}>
+      {/* Course Header - Clickable */}
+      <div 
+        className="p-4 cursor-pointer hover:bg-white/5 transition-colors"
+        onClick={onToggle}
+      >
+        {/* Mobile-friendly layout */}
+        <div className="flex items-start gap-3">
+          {/* Icon */}
+          <div className="w-10 h-10 bg-stone-800 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span className="text-lg">{course.timeOfDay === 'morning' ? '☀️' : course.timeOfDay === 'afternoon' ? '🌅' : '⛳'}</span>
+          </div>
+          
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <h4 className={`${colors.text} font-medium leading-tight`}>{course.name}</h4>
+              <svg className={`w-5 h-5 text-stone-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+            
+            {/* Course info row */}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-stone-400 text-sm mt-1">
+              <span className="capitalize">{course.type}</span>
+              <span>•</span>
+              <span>Par {course.par}</span>
+              <span>•</span>
+              <span>{course.yards} yards</span>
+            </div>
+            
+            {/* Tee Time - on its own row for visibility */}
+            <div className="flex items-center gap-2 mt-2">
+              <span className="text-stone-500 text-xs">Tee time:</span>
+              <span className={`text-sm font-medium ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
+                {course.teeTime || 'TBC'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Course Details - Expanded */}
+      {isExpanded && (
+        <div className="px-5 pb-5 border-t border-stone-700/30">
+          <div className="pt-5 space-y-4">
+            {/* Description */}
+            <p className="text-stone-300">{course.description}</p>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {course.established && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className={`text-lg font-light ${colors.text}`}>{course.established}</div>
+                  <div className="text-stone-500 text-xs">Etablert</div>
+                </div>
+              )}
+              {course.greenfee && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.greenfee}</div>
+                  <div className="text-stone-500 text-xs">Greenfee</div>
+                </div>
+              )}
+              {course.ranking && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.ranking}</div>
+                  <div className="text-stone-500 text-xs">Ranking</div>
+                </div>
+              )}
+              {course.distanceFromHouse && (
+                <div className="bg-stone-800/50 rounded-lg p-3 text-center">
+                  <div className="text-lg font-light text-stone-100">{course.distanceFromHouse}</div>
+                  <div className="text-stone-500 text-xs">Fra huset</div>
+                </div>
+              )}
+            </div>
+
+            {/* Designer */}
+            {course.designer && (
+              <div className={`p-4 ${colors.bg} rounded-xl border ${colors.border}`}>
+                <p className={`${colors.text} text-sm`}>
+                  <span className="font-medium">🏌️ Designer:</span> {course.designer}
+                </p>
+              </div>
+            )}
+
+            {/* Photos */}
+            {course.photos && course.photos.length > 0 && (
+              <div className="grid grid-cols-3 gap-2">
+                {course.photos.map((photo, i) => (
+                  <div 
+                    key={i}
+                    className="relative aspect-[4/3] rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={(e) => { e.stopPropagation(); onPhotoClick(photo); }}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt}
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Website Link */}
+            {course.websiteUrl && (
+              <a 
+                href={course.websiteUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 ${colors.text} hover:underline text-sm`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <span>🌐 Besøk nettsiden</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function DinnerCard({ day }: { day: DaySchedule }) {
+  if (!day.dinner) return null
+  
+  const colorMap: Record<string, { gradient: string; border: string; text: string; icon: string }> = {
+    amber: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', text: 'text-amber-400', icon: '🍔' },
+    emerald: { gradient: 'from-emerald-900/30 to-stone-800/50', border: 'border-emerald-800/30', text: 'text-emerald-400', icon: '🍽️' },
+    rose: { gradient: 'from-rose-900/30 to-stone-800/50', border: 'border-rose-800/30', text: 'text-rose-400', icon: '🍕' },
+    blue: { gradient: 'from-blue-900/30 to-stone-800/50', border: 'border-blue-800/30', text: 'text-blue-400', icon: '🍽️' },
+    stone: { gradient: 'from-stone-800 to-stone-700/50', border: 'border-stone-600/30', text: 'text-stone-400', icon: '🍽️' },
+  }
+  
+  const colors = colorMap[day.color] || colorMap.stone
+
+  return (
+    <div className={`bg-gradient-to-br ${colors.gradient} rounded-3xl p-8 border ${colors.border}`}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 bg-stone-900/50 rounded-xl flex items-center justify-center text-2xl">{colors.icon}</div>
+        <div>
+          <div className="text-stone-500 text-sm">{day.dayName} kveld</div>
+          <div className="text-stone-100 font-medium">{day.title}</div>
+        </div>
+      </div>
+      <div className="space-y-3">
+        <p className="text-stone-300">{day.dinner.description}</p>
+        {day.dinner.menu && <p className="text-stone-500 text-sm italic">{day.dinner.menu}</p>}
+      </div>
+      <div className="mt-6 pt-6 border-t border-stone-700/30">
+        <div className={`flex items-center gap-2 ${colors.text}`}>
+          <span>👨‍🍳</span>
+          <span className="font-medium">Kokk{day.dinner.chefs.length > 1 ? 'er' : ''}: {day.dinner.chefs.join(' & ')}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
