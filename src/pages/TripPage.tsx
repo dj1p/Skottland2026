@@ -381,42 +381,42 @@ export default function TripPage({ trip }: TripPageProps) {
                     </div>
                   </div>
 
-                  {/* Day Content */}
-                  {isExpanded && (
-                    <div className="px-8 pb-8 border-t border-stone-700/30">
-                      {/* Activities */}
-                      {day.activities.length > 0 && (
-                        <div className="pt-6 space-y-4">
-                          {day.activities.map((activity, i) => (
-                            <div key={i} className="flex items-center gap-4">
-                              <span className="text-2xl">{activity.icon}</span>
-                              <div>
-                                <p className="text-stone-300">{activity.title}</p>
-                                {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                {/* Day Content */}
+{isExpanded && (
+  <div className="px-8 pb-8 border-t border-stone-700/30">
+    {/* Courses - Expandable */}
+    {day.courses && day.courses.length > 0 && (
+      <div className="pt-6 space-y-4">
+        {day.courses.map((course, i) => (
+          <CourseCard 
+            key={i} 
+            course={course} 
+            isExpanded={expandedCourse === course.name}
+            onToggle={() => toggleCourse(course.name)}
+            onPhotoClick={openLightbox}
+            color={day.color}
+          />
+        ))}
+      </div>
+    )}
 
-                      {/* Courses - Expandable */}
-                      {day.courses && day.courses.length > 0 && (
-                        <div className="pt-6 space-y-4">
-                          {day.courses.map((course, i) => (
-                            <CourseCard 
-                              key={i} 
-                              course={course} 
-                              isExpanded={expandedCourse === course.name}
-                              onToggle={() => toggleCourse(course.name)}
-                              onPhotoClick={openLightbox}
-                              color={day.color}
-                            />
-                          ))}
-                        </div>
-                      )}
+    {/* Activities */}
+    {day.activities.length > 0 && (
+      <div className="pt-6 space-y-4">
+        {day.activities.map((activity, i) => (
+          <div key={i} className="flex items-center gap-4">
+            <span className="text-2xl">{activity.icon}</span>
+            <div>
+              <p className="text-stone-300">{activity.title}</p>
+              {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
 
-                      {/* Dinner */}
-                      {day.dinner && (
+    {/* Dinner */}
+    {day.dinner && (
                         <div className="pt-6 mt-6 border-t border-stone-700/30">
                           <div className="flex items-center gap-4">
                             <span className="text-2xl">👨‍🍳</span>
