@@ -251,4 +251,3 @@ export const trip2026: Trip = {
     { item: 'Forfar GC', amount: '£70', note: 'Per person' },
   ],
 }
-}
