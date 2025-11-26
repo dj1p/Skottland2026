@@ -213,7 +213,7 @@ export default function TripPage({ trip }: TripPageProps) {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mt-12">
-            <StatBadge icon="👥" value={`${trip.info.golfers}`} label="spillere" color="emerald" />
+            <StatBadge icon="👥" value={`${trip.info.golfers}`} label="venner" color="emerald" />
             <StatBadge icon="📅" value={`${trip.info.days}`} label="dager" color="amber" />
             <StatBadge icon="⛳" value={`${trip.info.rounds}`} label="runder" color="rose" />
           </div>
