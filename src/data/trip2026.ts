@@ -48,7 +48,7 @@ export const trip2026: Trip = {
       'Landskapsformet hage med utendørs spiseplass',
       'Oppvarmet sommerhus med biljard',
     ],
-    townDescription: 'Brechin er en historisk katedralby i Angus, nordøst i Skottland. Byen har en sjarmerende middelaldersk arkitektur med Brechin Cathedral fra 1100-tallet og det unike irsk-stilte rundtårnet fra år 1000. Byen ligger mellom Dundee og Aberdeen langs A90, med gode restauranter, puber og den berømte Caledonian Railway – en veteranjernbane som kjører om sommeren.',
+    townDescription: 'Brechin er en historisk katedralby i Angus, nordøst i Skottland. Byen har en sjarmerende middelaldersk arkitektur med Brechin Cathedral fra 1100-tallet og det unike irsk-stilte rundtårnet fra år 1000 som ble bygget for å redde munkene fra vikingene. Byen ligger mellom Dundee og Aberdeen langs A90, med gode restauranter, puber og den berømte Caledonian Railway – en veteranjernbane som kjører om sommeren. I Brechin har du et tårn bygget for å gjemme seg fra vikinger, og en viking-gravstein inne i katedralen, og en by som faktisk var under okkupasjon av vikingene.',
     // =========================================================================
     // BILDER AV HUSET - Endre src og caption etter behov
     // =========================================================================
@@ -86,7 +86,7 @@ export const trip2026: Trip = {
       dinner: {
         chefs: ['Tor'],
         description: 'Enkel foodtruck-mat etter reisen',
-        menu: 'Med mindre noen føler sin indre Gordon Ramsay...',
+        menu: 'Med mindre noen føler sin indre Gordon Ramsay så tar undertegnede seg av oppgaven...',
       },
     },
 
