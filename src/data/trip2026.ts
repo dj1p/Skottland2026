@@ -168,7 +168,7 @@ export const trip2026: Trip = {
           yards: 6096,
           established: 1893,
           designer: 'James Braid (1926)',
-          greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull - Ikke Golfamore i Helg',
+          greenfee: '£70 for 36 hull - Buggy: £40 for 36 hull - Ikke golfamore i helg',
           description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
           distanceFromHouse: '~5 min',
           timeOfDay: 'morning',
@@ -221,7 +221,7 @@ export const trip2026: Trip = {
           yards: 6052,
           established: 1871,
           designer: 'Old Tom Morris',
-          greenfee: '£45 - Ikke golfamore helg',
+          greenfee: '£45 - Ikke golfamore i helg',
           ranking: 'Første purpose-built 18-hulls bane',
           description: 'Historisk bane designet av Old Tom Morris i 1871. En av Skottlands eldste 18-hulls baner, med vakker parkland-setting og utfordrende layout.',
           distanceFromHouse: '~15 min',
@@ -246,8 +246,8 @@ export const trip2026: Trip = {
   // ===========================================================================
   costs: [
     { item: 'Overnatting (Airlie House)', amount: '5 213 NOK', note: '41 700 NOK / 8 personer' },
-    { item: 'Montrose Links (1562 + Broomfield)', amount: '£160', note: 'Per person' },
-    { item: 'Brechin GC (36 hull + buggy)', amount: '£110', note: '£70 golf + £40 buggy' },
-    { item: 'Forfar GC', amount: '£70', note: 'Per person' },
+    { item: 'Montrose Links (1562 + Broomfield)', amount: '£160', note: '+ £35 buggy' },
+    { item: 'Brechin GC (36 hull)', amount: '£70', note: '+ £40 buggy' },
+    { item: 'Forfar GC', amount: 'TBA', note: '' },
   ],
 }
