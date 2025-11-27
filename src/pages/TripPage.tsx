@@ -271,7 +271,7 @@ export default function TripPage({ trip }: TripPageProps) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <StatCard icon="🚗" value={trip.accommodation.distanceFromAirport} label="Fra Aberdeen lufthavn" />
+            <StatCard icon="🚗" value={trip.accommodation.distanceFromAirport} label="Fra Aberdeen flyplass" />
             <StatCard icon="⭐" value={trip.accommodation.rating.toString()} label="Airbnb Rating" />
             <StatCard icon="🛏️" value={trip.accommodation.bedrooms.toString()} label="Soverom" />
             <StatCard icon="🛁" value={trip.accommodation.bathrooms.toString()} label="Bad" />
