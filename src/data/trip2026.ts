@@ -211,7 +211,7 @@ export const trip2026: Trip = {
       subtitle: '1 runde før fly tilbake til Stavanger',
       color: 'blue',
       activities: [
-        { icon: '✈️', title: 'Fly hjem til Stavanger', description: 'Kort kjøretur til Aberdeen Airport etter runden' },
+        { icon: '✈️', title: 'Fly hjem til Stavanger', description: 'Kort kjøretur til Aberdeen flyplass etter runden' },
       ],
       courses: [
         {
