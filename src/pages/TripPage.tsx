@@ -244,14 +244,14 @@ export default function TripPage({ trip }: TripPageProps) {
 
       {/* Navigation */}
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-stone-900/98 shadow-lg' : 'bg-stone-900/95'} backdrop-blur-md border-b border-stone-800`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-center h-14">
-            <div className="flex gap-8 text-sm">
-              {['accommodation', 'schedule', 'photos', 'food', 'transport', 'costs'].map((id) => (
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-start md:justify-center h-14 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-4 md:gap-8 text-sm whitespace-nowrap">
+              {['accommodation', 'schedule', 'food', 'transport', 'costs', 'photos'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
-                  className="text-stone-400 hover:text-stone-200 transition-colors"
+                  className="text-stone-400 hover:text-stone-200 transition-colors px-1"
                 >
 {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : id === 'transport' ? 'Transport' : 'Kostnader'}
                 </button>
@@ -437,8 +437,7 @@ export default function TripPage({ trip }: TripPageProps) {
         </div>
       </section>
 
-
-
+      {/* Photos Section */}
       {/* Food Section */}
       <section id="food" className="py-24 bg-stone-900">
         <div className="max-w-7xl mx-auto px-6">
@@ -547,8 +546,9 @@ export default function TripPage({ trip }: TripPageProps) {
           </div>
         </section>
       )}
+
       {/* Photos Section */}
-      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+      <section id="photos" className="py-24 bg-gradient-to-b from-stone-900 to-stone-950">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
@@ -606,6 +606,7 @@ export default function TripPage({ trip }: TripPageProps) {
           ))}
         </div>
       </section>
+
       {/* Footer */}
       <footer className="py-12 bg-stone-950 border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-6">
@@ -727,9 +728,9 @@ function CourseCard({
             </div>
             
             {/* Tee Time - on its own row for visibility */}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-stone-500 text-xs">Tee time:</span>
-              <span className={`text-sm font-medium ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
+            <div className="flex items-start gap-2 mt-2">
+              <span className="text-stone-500 text-xs mt-0.5">Tee time:</span>
+              <span className={`text-sm font-medium whitespace-pre-line ${course.teeTime === 'TBC' || course.teeTime?.includes('*') ? 'text-amber-400' : 'text-emerald-400'}`}>
                 {course.teeTime || 'TBC'}
               </span>
             </div>
