@@ -322,7 +322,7 @@ transport: {
   // ===========================================================================
   costs: [
     { item: 'Overnatting (Airlie House)', amount: '5 213 NOK', note: '41 700 NOK / 8 personer' },
-    { item: 'Transport)', amount: 'TBA', note: '' },
+    { item: 'Transport', amount: 'TBA', note: '' },
     { item: 'Montrose Links (1562 + Broomfield)', amount: '£160', note: '+ £35 buggy' },
     { item: 'Brechin GC (36 hull)', amount: '£70', note: '+ £40 buggy' },
     { item: 'Forfar GC', amount: 'TBA', note: '' },
