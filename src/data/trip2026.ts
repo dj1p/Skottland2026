@@ -253,7 +253,7 @@ transport: {
     },
     {
       date: '28',
-      time: '07:30',
+      time: '08:00',
       from: 'Airlie House',
       to: 'Montrose Golf Links',
       provider: 'TBA',
@@ -262,7 +262,7 @@ transport: {
     },
     {
       date: '28',
-      time: '14:00',
+      time: '18:00',
       from: 'Montrose Golf Links',
       to: 'Airlie House',
       provider: 'TBA',
@@ -270,16 +270,16 @@ transport: {
     },
     {
       date: '29',
-      time: '08:00',
+      time: '09:30',
       from: 'Airlie House',
       to: 'Brechin Golf Club',
       provider: 'TBA',
-      notes: '30 min gange',
+      notes: 'Ca 5 min',
       confirmed: true,
     },
     {
       date: '30',
-      time: '09:30',
+      time: 'TBA',
       from: 'Airlie House',
       to: 'Forfar Golf Club',
       provider: 'TBA',
