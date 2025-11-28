@@ -437,65 +437,7 @@ export default function TripPage({ trip }: TripPageProps) {
         </div>
       </section>
 
-      {/* Photos Section */}
-      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
-            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Bilder</h2>
-          </div>
 
-          {/* House Photos */}
-          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
-            <div className="mb-16">
-              <h3 className="text-2xl font-light text-stone-100 mb-6">🏠 {trip.accommodation.name}</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {trip.accommodation.photos.map((photo, i) => (
-                  <div 
-                    key={i} 
-                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => openLightbox(photo)}
-                  >
-                    <img 
-                      src={photo.src} 
-                      alt={photo.alt} 
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                      <span className="text-white text-sm">{photo.caption}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Course Photos */}
-          {allCoursePhotos.map((courseGroup, groupIndex) => (
-            <div key={groupIndex} className="mb-16">
-              <h3 className="text-2xl font-light text-stone-100 mb-6">⛳ {courseGroup.course}</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {courseGroup.photos.map((photo, i) => (
-                  <div 
-                    key={i} 
-                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => openLightbox(photo)}
-                  >
-                    <img 
-                      src={photo.src} 
-                      alt={photo.alt} 
-                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
-                      <span className="text-white text-sm">{photo.caption}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Food Section */}
       <section id="food" className="py-24 bg-stone-900">
@@ -605,7 +547,65 @@ export default function TripPage({ trip }: TripPageProps) {
           </div>
         </section>
       )}
+      {/* Photos Section */}
+      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Bilder</h2>
+          </div>
 
+          {/* House Photos */}
+          {trip.accommodation.photos && trip.accommodation.photos.length > 0 && (
+            <div className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">🏠 {trip.accommodation.name}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {trip.accommodation.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => openLightbox(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Course Photos */}
+          {allCoursePhotos.map((courseGroup, groupIndex) => (
+            <div key={groupIndex} className="mb-16">
+              <h3 className="text-2xl font-light text-stone-100 mb-6">⛳ {courseGroup.course}</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {courseGroup.photos.map((photo, i) => (
+                  <div 
+                    key={i} 
+                    className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                    onClick={() => openLightbox(photo)}
+                  >
+                    <img 
+                      src={photo.src} 
+                      alt={photo.alt} 
+                      className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-3">
+                      <span className="text-white text-sm">{photo.caption}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
       {/* Footer */}
       <footer className="py-12 bg-stone-950 border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-6">
