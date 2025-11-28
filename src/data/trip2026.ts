@@ -235,7 +235,73 @@ export const trip2026: Trip = {
       ],
     },
   ],
+  // ===========================================================================
+  // TRANSPORT
+  // ===========================================================================
 
+transport: {
+  notes: 'All transport is included in the trip price',
+  legs: [
+    {
+      date: '27',
+      time: 'TBC',
+      from: 'Aberdeen Airport',
+      to: 'Airlie House, Brechin',
+      provider: 'TBC',
+      notes: '8-seater minibus',
+      confirmed: false,
+    },
+    {
+      date: '28',
+      time: '07:30',
+      from: 'Airlie House',
+      to: 'Montrose Golf Links',
+      provider: 'TBC',
+      notes: 'Approx 20 min drive',
+      confirmed: false,
+    },
+    {
+      date: '28',
+      time: '14:00',
+      from: 'Montrose Golf Links',
+      to: 'Airlie House',
+      provider: 'TBC',
+      confirmed: false,
+    },
+    {
+      date: '29',
+      time: '08:00',
+      from: 'Airlie House',
+      to: 'Brechin Golf Club',
+      provider: 'Walking distance',
+      notes: '5 min walk',
+      confirmed: true,
+    },
+    {
+      date: '30',
+      time: '09:30',
+      from: 'Airlie House',
+      to: 'Forfar Golf Club',
+      provider: 'TBC',
+      notes: 'Approx 15 min drive',
+      confirmed: false,
+    },
+    {
+      date: '30',
+      time: '15:30',
+      from: 'Forfar Golf Club',
+      to: 'Aberdeen Airport',
+      provider: 'TBC',
+      notes: 'Approx 1 hour drive - departure 20:00',
+      confirmed: false,
+    },
+  ],
+},
+  
+  // ===========================================================================
+  // TRANSPORT
+  // ===========================================================================
+  
   // ===========================================================================
   // RESTAURANTER I BRECHIN
   // ===========================================================================
