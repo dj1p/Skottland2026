@@ -80,7 +80,17 @@ export const trip2026: Trip = {
       color: 'amber',
       activities: [
         { icon: '✈️', title: 'Fly - Stavanger til Aberdeen', description: 'SK 4615 - SVG-ABZ - Avgang 1805 - Ankomst 1810' },
-        { icon: '🚗', title: 'Kjøretur til Brechin (~55 minutter)', description: 'Vi blir plukket opp på flyplassen, for å høyne utfordringen fra ifjor så har jeg bestilt en Nissan Micra' },
+        { 
+          icon: '🚗', 
+          title: 'Kjøretur til Brechin (~55 minutter)', 
+          description: 'Klikk for å se årets transportløsning! 👀',
+          photo: {
+            src: '/images/mini-minivan.png',
+            alt: 'Årets transport',
+            caption: 'Nissan Micra - 8 seter med bagasjeplass'
+          },
+          expandedContent: 'For å høyne utfordringen fra ifjor har jeg bestilt en STOR van. Sjåføren heter Angus McTavish og har masse gode historier som han elsker å fortelle om og om igjen. Golfbaggene fraktes separat med lasteesel.'
+        },
         { icon: '🏠', title: 'Innsjekking Airlie House' },
       ],
       dinner: {
