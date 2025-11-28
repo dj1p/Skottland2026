@@ -94,3 +94,23 @@ export interface Trip {
     costs?: { item: string; amount: string; note?: string }[]
   isUpcoming: boolean
 }
+
+export interface TransportLeg {
+  date: string;           // e.g., "27" for August 27
+  time: string;           // e.g., "14:30"
+  from: string;           // e.g., "Aberdeen Airport"
+  to: string;             // e.g., "Airlie House, Brechin"
+  provider?: string;      // e.g., "VIP Taxis" or "Black's of Brechin"
+  contact?: string;       // Phone number or booking ref
+  vehicleType?: string;   // e.g., "8-seater minibus", "16-seater coach"
+  cost?: string;          // e.g., "£120" or "£15 per person"
+  notes?: string;         // Additional notes
+  confirmed: boolean;     // Shows green/yellow status like tee times
+}
+
+export interface Transport {
+  legs: TransportLeg[];
+  totalCost?: string;     // e.g., "£480" - total for all transport
+  costPerPerson?: string; // e.g., "£60" - split between 8
+  notes?: string;         // General transport notes
+}
