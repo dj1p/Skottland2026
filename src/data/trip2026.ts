@@ -240,15 +240,15 @@ export const trip2026: Trip = {
   // ===========================================================================
 
 transport: {
-  notes: 'All transport is included in the trip price',
+  notes: '',
   legs: [
     {
       date: '27',
-      time: 'TBC',
+      time: 'TBA',
       from: 'Aberdeen Airport',
       to: 'Airlie House, Brechin',
-      provider: 'TBC',
-      notes: '8-seater minibus',
+      provider: 'TBA',
+      notes: 'Minibuss',
       confirmed: false,
     },
     {
@@ -256,8 +256,8 @@ transport: {
       time: '07:30',
       from: 'Airlie House',
       to: 'Montrose Golf Links',
-      provider: 'TBC',
-      notes: 'Approx 20 min drive',
+      provider: 'TBA',
+      notes: 'Ca 20 min',
       confirmed: false,
     },
     {
@@ -265,7 +265,7 @@ transport: {
       time: '14:00',
       from: 'Montrose Golf Links',
       to: 'Airlie House',
-      provider: 'TBC',
+      provider: 'TBA',
       confirmed: false,
     },
     {
@@ -273,8 +273,8 @@ transport: {
       time: '08:00',
       from: 'Airlie House',
       to: 'Brechin Golf Club',
-      provider: 'Walking distance',
-      notes: '5 min walk',
+      provider: 'TBA',
+      notes: '30 min gange',
       confirmed: true,
     },
     {
@@ -282,17 +282,17 @@ transport: {
       time: '09:30',
       from: 'Airlie House',
       to: 'Forfar Golf Club',
-      provider: 'TBC',
-      notes: 'Approx 15 min drive',
+      provider: 'TBA',
+      notes: 'Ca 15 min',
       confirmed: false,
     },
     {
       date: '30',
-      time: '15:30',
+      time: '15:30 - 16:00',
       from: 'Forfar Golf Club',
       to: 'Aberdeen Airport',
-      provider: 'TBC',
-      notes: 'Approx 1 hour drive - departure 20:00',
+      provider: 'TBA',
+      notes: 'Ca 1 time - avgang til SVG: 20:00',
       confirmed: false,
     },
   ],
