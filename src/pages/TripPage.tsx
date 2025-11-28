@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, TouchEvent } from 'react'
-import { Trip, DaySchedule, GolfCourse, Photo } from '../data/types'
+import { Trip, DaySchedule, GolfCourse, Photo, Transport } from '../data/types'
 
 interface TripPageProps {
   trip: Trip
@@ -247,13 +247,13 @@ export default function TripPage({ trip }: TripPageProps) {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-center h-14">
             <div className="flex gap-8 text-sm">
-              {['accommodation', 'schedule', 'photos', 'food', 'costs'].map((id) => (
+              {['accommodation', 'schedule', 'photos', 'food', 'transport', 'costs'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
                   className="text-stone-400 hover:text-stone-200 transition-colors"
                 >
-{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : 'Kostnader'}
+{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : id === 'transport' ? 'Transport' : 'Kostnader'}
                 </button>
               ))}
             </div>
@@ -570,7 +570,42 @@ export default function TripPage({ trip }: TripPageProps) {
         </section>
       )}
 
-      {/* Footer */}
+      {/* Transport Section */}
+      {trip.transport && (
+        <section id="transport" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-blue-400 text-sm tracking-widest uppercase">Logistikk</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Transport</h2>
+            </div>
+
+            {/* Cost summary */}
+            {(trip.transport.totalCost || trip.transport.costPerPerson) && (
+              <div className="bg-blue-900/20 rounded-xl p-4 mb-8 flex flex-wrap justify-center gap-6 text-sm border border-blue-800/30">
+                {trip.transport.totalCost && (
+                  <div>
+                    <span className="text-stone-400">Total: </span>
+                    <span className="font-semibold text-blue-400">{trip.transport.totalCost}</span>
+                  </div>
+                )}
+                {trip.transport.costPerPerson && (
+                  <div>
+                    <span className="text-stone-400">Per person: </span>
+                    <span className="font-semibold text-blue-400">{trip.transport.costPerPerson}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {trip.transport.notes && (
+              <p className="text-stone-400 mb-8 text-center text-sm italic">{trip.transport.notes}</p>
+            )}
+
+            <TransportSchedule transport={trip.transport} />
+          </div>
+        </section>
+      )}
+
       {/* Footer */}
       <footer className="py-12 bg-stone-950 border-t border-stone-800">
         <div className="max-w-7xl mx-auto px-6">
@@ -818,6 +853,94 @@ function DinnerCard({ day }: { day: DaySchedule }) {
           <span className="font-medium">Kokk{day.dinner.chefs.length > 1 ? 'er' : ''}: {day.dinner.chefs.join(' & ')}</span>
         </div>
       </div>
+    </div>
+  )
+}
+
+// Transport Schedule Component
+function TransportSchedule({ transport }: { transport: Transport }) {
+  const dayNames: Record<string, string> = {
+    '27': 'Torsdag 27. Aug',
+    '28': 'Fredag 28. Aug',
+    '29': 'Lørdag 29. Aug',
+    '30': 'Søndag 30. Aug',
+  }
+
+  // Group legs by date
+  const legsByDate = transport.legs.reduce((acc, leg) => {
+    if (!acc[leg.date]) acc[leg.date] = []
+    acc[leg.date].push(leg)
+    return acc
+  }, {} as Record<string, typeof transport.legs>)
+
+  return (
+    <div className="space-y-8">
+      {Object.entries(legsByDate).map(([date, legs]) => (
+        <div key={date} className="bg-stone-800/50 rounded-2xl border border-stone-700/50 overflow-hidden">
+          <div className="bg-stone-800 px-6 py-4 border-b border-stone-700/50">
+            <h3 className="text-lg font-medium text-stone-100">{dayNames[date] || `Aug ${date}`}</h3>
+          </div>
+          
+          <div className="divide-y divide-stone-700/30">
+            {legs.map((leg, idx) => (
+              <div key={idx} className="p-4 md:p-6">
+                {/* Top row: Time and Route */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  {/* Time badge */}
+                  <div className={`
+                    inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium w-fit
+                    ${leg.confirmed 
+                      ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-800/30' 
+                      : 'bg-amber-900/30 text-amber-400 border border-amber-800/30'}
+                  `}>
+                    {leg.time}
+                  </div>
+                  
+                  {/* Route */}
+                  <div className="flex items-center gap-2 text-stone-200 flex-1 min-w-0">
+                    <span className="font-medium truncate">{leg.from}</span>
+                    <svg className="w-4 h-4 text-stone-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                    <span className="font-medium truncate">{leg.to}</span>
+                  </div>
+
+                  {/* Cost badge (if present) */}
+                  {leg.cost && (
+                    <div className="inline-flex items-center px-3 py-1.5 bg-blue-900/30 text-blue-400 border border-blue-800/30 rounded-lg text-sm font-medium w-fit">
+                      {leg.cost}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Details row */}
+                {(leg.provider || leg.vehicleType || leg.contact || leg.notes) && (
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-sm text-stone-400">
+                    {leg.provider && (
+                      <span className="flex items-center gap-1.5">
+                        <span>🏢</span> {leg.provider}
+                      </span>
+                    )}
+                    {leg.vehicleType && (
+                      <span className="flex items-center gap-1.5">
+                        <span>🚐</span> {leg.vehicleType}
+                      </span>
+                    )}
+                    {leg.contact && (
+                      <span className="flex items-center gap-1.5">
+                        <span>📞</span> {leg.contact}
+                      </span>
+                    )}
+                    {leg.notes && (
+                      <span className="italic text-stone-500">{leg.notes}</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
