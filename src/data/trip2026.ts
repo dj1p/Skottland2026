@@ -114,7 +114,7 @@ export const trip2026: Trip = {
           description: 'En av verdens eldste golfbaner der golf har vært spilt siden 1562. Open Championship qualifying venue.',
           distanceFromHouse: '~25 min',
           timeOfDay: 'morning',
-          teeTime: 'Flight 1: 09:08 / Flight 2: 09:16', // Endre til f.eks. "08:30" når bekreftet
+          teeTime: 'Flight 1: 09:08\nFlight 2: 09:16', // Endre til f.eks. "08:30" når bekreftet
           websiteUrl: 'https://montrosegolflinks.com/',
           photos: [
             { src: '/images/montrose1562---1.jpeg', alt: 'Montrose 1562', caption: 'Historisk links' },
@@ -172,7 +172,7 @@ export const trip2026: Trip = {
           description: 'Fantastisk parklandbane midt i Angus. Hullene 10-17 er hovedsakelig James Braids verk. Berømt for noen av de beste puttingflatene i østlige Skottland. Utsikt mot Grampian-fjellene.',
           distanceFromHouse: '~5 min med bil / 30 min gange',
           timeOfDay: 'morning',
-          teeTime: 'Flight 1: 10:07 / Flight 2: 10:14',
+          teeTime: 'Flight 1: 10:07\nFlight 2: 10:14',
           websiteUrl: 'http://brechingolfclub.co.uk/',
           photos: [
             { src: '/images/brechin1.jpg', alt: 'Brechin GC', caption: 'Parkland perle' },
