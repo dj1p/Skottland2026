@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, TouchEvent } from 'react'
-import { Trip, DaySchedule, GolfCourse, Photo, Transport } from '../data/types'
+import { Trip, DaySchedule, GolfCourse, Photo, Transport, Activity } from '../data/types'
 
 interface TripPageProps {
   trip: Trip
@@ -9,6 +9,7 @@ export default function TripPage({ trip }: TripPageProps) {
   const [activeSection, setActiveSection] = useState('home')
   const [expandedDay, setExpandedDay] = useState<string | null>(null)
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
+  const [expandedActivity, setExpandedActivity] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -26,6 +27,15 @@ export default function TripPage({ trip }: TripPageProps) {
     day.courses?.forEach(course => {
       if (course.photos) {
         allPhotos.push(...course.photos)
+      }
+    })
+  })
+
+  // Add activity photos
+  trip.schedule.forEach(day => {
+    day.activities?.forEach(activity => {
+      if (activity.photo) {
+        allPhotos.push(activity.photo)
       }
     })
   })
@@ -403,15 +413,57 @@ export default function TripPage({ trip }: TripPageProps) {
     {/* Activities */}
     {day.activities.length > 0 && (
       <div className="pt-6 space-y-4">
-        {day.activities.map((activity, i) => (
-          <div key={i} className="flex items-center gap-4">
-            <span className="text-2xl">{activity.icon}</span>
-            <div>
-              <p className="text-stone-300">{activity.title}</p>
-              {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
+        {day.activities.map((activity, i) => {
+          const activityKey = `${day.date}-${i}`
+          const hasExpandableContent = activity.photo || activity.expandedContent
+          const isActivityExpanded = expandedActivity === activityKey
+
+          return (
+            <div key={i} className="space-y-3">
+              <div 
+                className={`flex items-center gap-4 ${hasExpandableContent ? 'cursor-pointer hover:bg-white/5 -mx-2 px-2 py-1 rounded-lg transition-colors' : ''}`}
+                onClick={() => hasExpandableContent && setExpandedActivity(isActivityExpanded ? null : activityKey)}
+              >
+                <span className="text-2xl">{activity.icon}</span>
+                <div className="flex-1">
+                  <p className="text-stone-300">{activity.title}</p>
+                  {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
+                </div>
+                {hasExpandableContent && (
+                  <svg className={`w-5 h-5 text-stone-400 transition-transform ${isActivityExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </div>
+              
+              {/* Expanded content */}
+              {isActivityExpanded && hasExpandableContent && (
+                <div className="ml-10 space-y-3 animate-in slide-in-from-top-2">
+                  {activity.photo && (
+                    <div 
+                      className="relative max-w-sm rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={(e) => { e.stopPropagation(); openLightbox(activity.photo!) }}
+                    >
+                      <img 
+                        src={activity.photo.src} 
+                        alt={activity.photo.alt}
+                        className="w-full h-auto object-cover transition-transform group-hover:scale-105"
+                      />
+                      {activity.photo.caption && (
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                          <span className="text-white text-sm">{activity.photo.caption}</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {activity.expandedContent && (
+                    <p className="text-stone-400 text-sm italic">{activity.expandedContent}</p>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     )}
 
