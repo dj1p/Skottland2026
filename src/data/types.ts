@@ -93,6 +93,7 @@ export interface Trip {
   restaurants: Restaurant[]
     costs?: { item: string; amount: string; note?: string }[]
   isUpcoming: boolean
+    transport?: Transport
 }
 
 export interface TransportLeg {
