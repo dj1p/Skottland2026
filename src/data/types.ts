@@ -29,6 +29,8 @@ export interface Activity {
   icon: string
   title: string
   description?: string
+  photo?: Photo              // Optional photo for expandable content
+  expandedContent?: string   // Optional expanded description/joke
 }
 
 export interface DinnerInfo {
