@@ -248,7 +248,7 @@ transport: {
       from: 'Aberdeen Airport',
       to: 'Airlie House, Brechin',
       provider: 'TBA',
-      notes: 'Minibuss',
+      notes: 'Ca 1 time - Minibuss',
       confirmed: false,
     },
     {
@@ -274,7 +274,7 @@ transport: {
       from: 'Airlie House',
       to: 'Brechin Golf Club',
       provider: 'TBA',
-      notes: 'Ca 5 min',
+      notes: 'Ca 5 min - For langt å gå',
       confirmed: true,
     },
     {
@@ -283,7 +283,7 @@ transport: {
       from: 'Airlie House',
       to: 'Forfar Golf Club',
       provider: 'TBA',
-      notes: 'Ca 15 min',
+      notes: 'Ca 15 min - Minibuss - Vi reiser direkte fra Forfar til flyplassen',
       confirmed: false,
     },
     {
