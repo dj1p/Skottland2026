@@ -554,7 +554,10 @@ export default function TripPage({ trip }: TripPageProps) {
                       <p className="text-stone-100 font-medium">Totalt estimat</p>
                       <p className="text-stone-500 text-sm">Golf: £340 + Hus: 5 213 NOK + Mat: ca 500 NOK</p>
                     </div>
-                    <div className="text-emerald-400 font-bold text-xl">~10 500 NOK</div>
+                    <div className="text-right">
+                      <div className="text-emerald-400 font-bold text-xl">~10 500 NOK</div>
+                      <div className="text-stone-500 text-xs">vs 2024: 13 130 NOK</div>
+                    </div>
                   </div>
                 </div>
               </div>
