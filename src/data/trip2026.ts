@@ -235,7 +235,7 @@ export const trip2026: Trip = {
           ranking: 'Første purpose-built 18-hulls bane',
           description: 'Historisk bane designet av Old Tom Morris i 1871. En av Skottlands eldste 18-hulls baner, med vakker parkland-setting og utfordrende layout.',
           distanceFromHouse: '~15 min',
-          teeTime: '*Kommer*', // Endre til f.eks. "09:00" når bekreftet
+          teeTime: '11:00', // Endre til f.eks. "09:00" når bekreftet
           websiteUrl: 'https://www.forfargolfclub.co.uk/',
           photos: [
             { src: '/images/forfar1.jpg', alt: 'Forfar GC', caption: 'Old Tom Morris design' },
