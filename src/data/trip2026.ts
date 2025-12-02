@@ -200,7 +200,7 @@ export const trip2026: Trip = {
           description: 'Andre runde på Brechin - kanskje revansje? Kanskje scramble?',
           distanceFromHouse: '~5 min med bil / 30 min gange',
           timeOfDay: 'afternoon',
-          teeTime: '*Kommer*',
+          teeTime: 'Fleksibel.\nKan spille når vi er klare.',
           websiteUrl: 'http://brechingolfclub.co.uk/',
         },
       ],
