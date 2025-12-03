@@ -1026,21 +1026,27 @@ function ExpensesDisplay({ expenses }: { expenses: { description: string; amount
 
   return (
     <div className="bg-stone-900/50 rounded-3xl border border-stone-700/50 overflow-hidden">
-      {expenses.map((expense, index) => (
-        <div 
-          key={index} 
-          className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 gap-3 ${index !== expenses.length - 1 ? 'border-b border-stone-700/30' : ''}`}
-        >
-          <div className="flex-1">
-            <p className="text-stone-100 font-medium">{expense.description}</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-stone-400">
-              <span>Betalt av: {expense.paidBy}</span>
-              {expense.date && <span>{new Date(expense.date).toLocaleDateString('nb-NO')}</span>}
+      {expenses.map((expense, index) => {
+        const perPerson = expense.amount / 8
+        return (
+          <div 
+            key={index} 
+            className={`flex flex-col sm:flex-row sm:items-start sm:justify-between p-6 gap-3 ${index !== expenses.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+          >
+            <div className="flex-1">
+              <p className="text-stone-100 font-medium">{expense.description}</p>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-stone-400">
+                <span>Betalt av: {expense.paidBy}</span>
+                {expense.date && <span>{new Date(expense.date).toLocaleDateString('nb-NO')}</span>}
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-blue-400 font-semibold text-lg whitespace-nowrap">{expense.amount.toLocaleString('nb-NO')} NOK</div>
+              <div className="text-stone-500 text-sm mt-1">Per person: <span className="text-blue-300">{perPerson.toLocaleString('nb-NO')} NOK</span></div>
             </div>
           </div>
-          <div className="text-blue-400 font-semibold text-lg whitespace-nowrap">{expense.amount.toLocaleString('nb-NO')} NOK</div>
-        </div>
-      ))}
+        )
+      })}
       
       {/* Total */}
       <div className="bg-blue-900/30 p-6 border-t border-blue-800/30">
