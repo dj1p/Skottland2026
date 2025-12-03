@@ -23,6 +23,14 @@ export interface GolfCourse {
   teeTime?: string // e.g. "09:00" or "TBC"
   websiteUrl?: string
   photos?: Photo[]
+}
+
+export interface Expense {
+  description: string;
+  amount: number;
+  paidBy: string;
+  date?: string;
+}
 
 export interface Activity {
   icon: string
@@ -82,14 +90,6 @@ export interface TripInfo {
   days: number
   rounds: number
 }
-  
-export interface Expense {
-  description: string;
-  amount: number;
-  paidBy: string;
-  date?: string;
-}
-
 
 export interface Trip {
   year: number
@@ -100,9 +100,10 @@ export interface Trip {
   accommodation: Accommodation
   schedule: DaySchedule[]
   restaurants: Restaurant[]
-    costs?: { item: string; amount: string; note?: string }[]
+  costs?: { item: string; amount: string; note?: string }[]
+  expenses?: Expense[]
   isUpcoming: boolean
-    transport?: Transport
+  transport?: Transport
 }
 
 export interface TransportLeg {
