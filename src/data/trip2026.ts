@@ -319,27 +319,23 @@ transport: {
 ],
 
   // ===========================================================================
-  // Expenses
+  // UTGIFTER (Expenses paid before trip)
   // ===========================================================================
-  export const trip2026: Trip = {
-  // ... existing data
-  
   expenses: [
     {
-      description: 'Airlie House depositum',
+      description: 'Airlie House Depositum',
       amount: 24180,
       paidBy: 'Klaus',
       date: '2025-11-26'
     },
     {
-      description: 'Montrose booking depositum',
+      description: 'Montrose booking deposit',
       amount: 3750,
       paidBy: 'Tor',
-      date: '2025-12-3'
+      date: '2025-12-03'
     },
-    // Add more expenses as needed
   ],
-}
+
   // ===========================================================================
   // KOSTNADER
   // ===========================================================================
