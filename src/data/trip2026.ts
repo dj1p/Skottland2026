@@ -323,13 +323,13 @@ transport: {
   // ===========================================================================
   expenses: [
     {
-      description: 'Airlie House Depositum',
+      description: 'Airlie House depositum',
       amount: 24180,
       paidBy: 'Klaus',
       date: '2025-11-26'
     },
     {
-      description: 'Montrose booking deposit',
+      description: 'Montrose GC booking depositum',
       amount: 3750,
       paidBy: 'Tor',
       date: '2025-12-03'
