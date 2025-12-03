@@ -7,6 +7,7 @@ export interface Photo {
   alt: string
   caption?: string
 }
+
 export interface TeamPairing {
   team: string
   player1: string
@@ -42,7 +43,7 @@ export interface GolfCourse {
   teeTime?: string // e.g. "09:00" or "TBC"
   websiteUrl?: string
   photos?: Photo[]
-  teamLineup?: TeamLineup
+  teamLineup?: TeamLineup    // Team/foursome lineup for this round
 }
 
 export interface Expense {
