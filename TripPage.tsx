@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, TouchEvent } from 'react'
-import { Trip, DaySchedule, GolfCourse, Photo } from '../data/types'
+import { Trip, DaySchedule, GolfCourse, Photo, Transport, Activity } from '../data/types'
 
 interface TripPageProps {
   trip: Trip
@@ -9,6 +9,7 @@ export default function TripPage({ trip }: TripPageProps) {
   const [activeSection, setActiveSection] = useState('home')
   const [expandedDay, setExpandedDay] = useState<string | null>(null)
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
+  const [expandedActivity, setExpandedActivity] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -26,6 +27,15 @@ export default function TripPage({ trip }: TripPageProps) {
     day.courses?.forEach(course => {
       if (course.photos) {
         allPhotos.push(...course.photos)
+      }
+    })
+  })
+
+  // Add activity photos
+  trip.schedule.forEach(day => {
+    day.activities?.forEach(activity => {
+      if (activity.photo) {
+        allPhotos.push(activity.photo)
       }
     })
   })
@@ -201,7 +211,6 @@ export default function TripPage({ trip }: TripPageProps) {
         }}></div>
 
         <div className="relative z-10 text-center px-6">
-          
           <h1 className="text-6xl md:text-8xl font-light tracking-tight mb-4">
             <span className="block text-stone-300">{trip.title}</span>
             <span className="block text-5xl md:text-7xl mt-2 gradient-text font-medium">
@@ -214,7 +223,7 @@ export default function TripPage({ trip }: TripPageProps) {
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mt-12">
-            <StatBadge icon="👥" value={`${trip.info.golfers}`} label="golfere" color="emerald" />
+            <StatBadge icon="👥" value={`${trip.info.golfers}`} label="venner" color="emerald" />
             <StatBadge icon="📅" value={`${trip.info.days}`} label="dager" color="amber" />
             <StatBadge icon="⛳" value={`${trip.info.rounds}`} label="runder" color="rose" />
           </div>
@@ -245,16 +254,16 @@ export default function TripPage({ trip }: TripPageProps) {
 
       {/* Navigation */}
       <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-stone-900/98 shadow-lg' : 'bg-stone-900/95'} backdrop-blur-md border-b border-stone-800`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex items-center justify-center h-14">
-            <div className="flex gap-8 text-sm">
-              {['accommodation', 'schedule', 'photos', 'food'].map((id) => (
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-start md:justify-center h-14 overflow-x-auto scrollbar-hide">
+            <div className="flex gap-4 md:gap-8 text-sm whitespace-nowrap">
+              {['accommodation', 'schedule', 'food', 'transport', 'expenses', 'costs', 'photos'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
-                  className="text-stone-400 hover:text-stone-200 transition-colors"
+                  className="text-stone-400 hover:text-stone-200 transition-colors px-1"
                 >
-                  {id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : 'Mat'}
+{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : id === 'transport' ? 'Transport' : id === 'expenses' ? 'Utgifter' : 'Kostnader'}
                 </button>
               ))}
             </div>
@@ -272,7 +281,7 @@ export default function TripPage({ trip }: TripPageProps) {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <StatCard icon="🚗" value={trip.accommodation.distanceFromAirport} label="Fra Aberdeen Airport" />
+            <StatCard icon="🚗" value={trip.accommodation.distanceFromAirport} label="Fra Aberdeen flyplass" />
             <StatCard icon="⭐" value={trip.accommodation.rating.toString()} label="Airbnb Rating" />
             <StatCard icon="🛏️" value={trip.accommodation.bedrooms.toString()} label="Soverom" />
             <StatCard icon="🛁" value={trip.accommodation.bathrooms.toString()} label="Bad" />
@@ -382,42 +391,84 @@ export default function TripPage({ trip }: TripPageProps) {
                     </div>
                   </div>
 
-                  {/* Day Content */}
-                  {isExpanded && (
-                    <div className="px-8 pb-8 border-t border-stone-700/30">
-                      {/* Activities */}
-                      {day.activities.length > 0 && (
-                        <div className="pt-6 space-y-4">
-                          {day.activities.map((activity, i) => (
-                            <div key={i} className="flex items-center gap-4">
-                              <span className="text-2xl">{activity.icon}</span>
-                              <div>
-                                <p className="text-stone-300">{activity.title}</p>
-                                {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
-                              </div>
-                            </div>
-                          ))}
+                {/* Day Content */}
+{isExpanded && (
+  <div className="px-8 pb-8 border-t border-stone-700/30">
+    {/* Courses - Expandable */}
+    {day.courses && day.courses.length > 0 && (
+      <div className="pt-6 space-y-4">
+        {day.courses.map((course, i) => (
+          <CourseCard 
+            key={i} 
+            course={course} 
+            isExpanded={expandedCourse === course.name}
+            onToggle={() => toggleCourse(course.name)}
+            onPhotoClick={openLightbox}
+            color={day.color}
+          />
+        ))}
+      </div>
+    )}
+
+    {/* Activities */}
+    {day.activities.length > 0 && (
+      <div className="pt-6 space-y-4">
+        {day.activities.map((activity, i) => {
+          const activityKey = `${day.date}-${i}`
+          const hasExpandableContent = activity.photo || activity.expandedContent
+          const isActivityExpanded = expandedActivity === activityKey
+
+          return (
+            <div key={i} className="space-y-3">
+              <div 
+                className={`flex items-center gap-4 ${hasExpandableContent ? 'cursor-pointer hover:bg-white/5 -mx-2 px-2 py-1 rounded-lg transition-colors' : ''}`}
+                onClick={() => hasExpandableContent && setExpandedActivity(isActivityExpanded ? null : activityKey)}
+              >
+                <span className="text-2xl">{activity.icon}</span>
+                <div className="flex-1">
+                  <p className="text-stone-300">{activity.title}</p>
+                  {activity.description && <p className="text-stone-500 text-sm">{activity.description}</p>}
+                </div>
+                {hasExpandableContent && (
+                  <svg className={`w-5 h-5 text-stone-400 transition-transform ${isActivityExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                )}
+              </div>
+              
+              {/* Expanded content */}
+              {isActivityExpanded && hasExpandableContent && (
+                <div className="ml-10 space-y-3 animate-in slide-in-from-top-2">
+                  {activity.photo && (
+                    <div 
+                      className="relative max-w-sm rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={(e) => { e.stopPropagation(); openLightbox(activity.photo!) }}
+                    >
+                      <img 
+                        src={activity.photo.src} 
+                        alt={activity.photo.alt}
+                        className="w-full h-auto object-cover transition-transform group-hover:scale-105"
+                      />
+                      {activity.photo.caption && (
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+                          <span className="text-white text-sm">{activity.photo.caption}</span>
                         </div>
                       )}
+                    </div>
+                  )}
+                  {activity.expandedContent && (
+                    <p className="text-stone-400 text-sm italic">{activity.expandedContent}</p>
+                  )}
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+    )}
 
-                      {/* Courses - Expandable */}
-                      {day.courses && day.courses.length > 0 && (
-                        <div className="pt-6 space-y-4">
-                          {day.courses.map((course, i) => (
-                            <CourseCard 
-                              key={i} 
-                              course={course} 
-                              isExpanded={expandedCourse === course.name}
-                              onToggle={() => toggleCourse(course.name)}
-                              onPhotoClick={openLightbox}
-                              color={day.color}
-                            />
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Dinner */}
-                      {day.dinner && (
+    {/* Dinner */}
+    {day.dinner && (
                         <div className="pt-6 mt-6 border-t border-stone-700/30">
                           <div className="flex items-center gap-4">
                             <span className="text-2xl">👨‍🍳</span>
@@ -439,7 +490,138 @@ export default function TripPage({ trip }: TripPageProps) {
       </section>
 
       {/* Photos Section */}
-      <section id="photos" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+      {/* Food Section */}
+      <section id="food" className="py-24 bg-stone-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <span className="text-rose-400 text-sm tracking-widest uppercase">Kulinarisk</span>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Mat & Drikke</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {trip.schedule.filter(day => day.dinner).map((day, index) => (
+              <DinnerCard key={index} day={day} />
+            ))}
+          </div>
+
+          {trip.restaurants.length > 0 && (
+            <div className="mt-12 bg-stone-800/50 rounded-3xl p-8 border border-stone-700/50">
+              <h3 className="text-xl font-medium text-stone-100 mb-4">🍻 Restauranter i området</h3>
+              <div className="grid md:grid-cols-2 gap-4">
+                {trip.restaurants.map((restaurant, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="text-amber-400">•</span>
+                    <div>
+                      <span className="text-stone-300">{restaurant.name}</span>
+                      <span className="text-stone-500 text-sm block">{restaurant.description}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Expenses Section */}
+      {trip.expenses && trip.expenses.length > 0 && (
+        <section id="expenses" className="py-24 bg-stone-900">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-blue-400 text-sm tracking-widest uppercase">Utgifter</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Forskuddsbetalinger</h2>
+              <p className="text-stone-400 mt-4">Betalt før turen</p>
+            </div>
+
+            <div className="max-w-2xl mx-auto">
+              <ExpensesDisplay expenses={trip.expenses} />
+            </div>
+          </div>
+        </section>
+      )}
+
+{/* Costs Section */}
+      {trip.costs && trip.costs.length > 0 && (
+        <section id="costs" className="py-24 bg-stone-800">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-amber-400 text-sm tracking-widest uppercase">Økonomi</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Kostnader</h2>
+              <p className="text-stone-400 mt-4">Pris per person</p>
+            </div>
+
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-stone-900/50 rounded-3xl border border-stone-700/50 overflow-hidden">
+                {trip.costs.map((cost, i) => (
+                  <div 
+                    key={i} 
+                    className={`flex items-center justify-between p-6 ${i !== trip.costs!.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+                  >
+                    <div>
+                      <p className="text-stone-100 font-medium">{cost.item}</p>
+                      {cost.note && <p className="text-stone-500 text-sm">{cost.note}</p>}
+                    </div>
+                    <div className="text-emerald-400 font-semibold text-lg">{cost.amount}</div>
+                  </div>
+                ))}
+                
+                {/* Total */}
+                <div className="bg-emerald-900/30 p-6 border-t border-emerald-800/30">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                    <div>
+                      <p className="text-stone-100 font-medium">Totalt estimat</p>
+                      <p className="text-stone-500 text-sm">Golf: £340 + Hus: 5 213 NOK + Mat: ca 500 NOK</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-emerald-400 font-bold text-xl">~10 500 NOK</div>
+                      <div className="text-stone-500 text-xs">vs 2024: 13 130 NOK</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Transport Section */}
+      {trip.transport && (
+        <section id="transport" className="py-24 bg-gradient-to-b from-stone-800 to-stone-900">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-blue-400 text-sm tracking-widest uppercase">Logistikk</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Transport</h2>
+            </div>
+
+            {/* Cost summary */}
+            {(trip.transport.totalCost || trip.transport.costPerPerson) && (
+              <div className="bg-blue-900/20 rounded-xl p-4 mb-8 flex flex-wrap justify-center gap-6 text-sm border border-blue-800/30">
+                {trip.transport.totalCost && (
+                  <div>
+                    <span className="text-stone-400">Total: </span>
+                    <span className="font-semibold text-blue-400">{trip.transport.totalCost}</span>
+                  </div>
+                )}
+                {trip.transport.costPerPerson && (
+                  <div>
+                    <span className="text-stone-400">Per person: </span>
+                    <span className="font-semibold text-blue-400">{trip.transport.costPerPerson}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {trip.transport.notes && (
+              <p className="text-stone-400 mb-8 text-center text-sm italic">{trip.transport.notes}</p>
+            )}
+
+            <TransportSchedule transport={trip.transport} />
+          </div>
+        </section>
+      )}
+
+      {/* Photos Section */}
+      <section id="photos" className="py-24 bg-gradient-to-b from-stone-900 to-stone-950">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-emerald-400 text-sm tracking-widest uppercase">Galleri</span>
@@ -495,39 +677,6 @@ export default function TripPage({ trip }: TripPageProps) {
               </div>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Food Section */}
-      <section id="food" className="py-24 bg-stone-900">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <span className="text-rose-400 text-sm tracking-widest uppercase">Kulinarisk</span>
-            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Mat & Drikke</h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {trip.schedule.filter(day => day.dinner).map((day, index) => (
-              <DinnerCard key={index} day={day} />
-            ))}
-          </div>
-
-          {trip.restaurants.length > 0 && (
-            <div className="mt-12 bg-stone-800/50 rounded-3xl p-8 border border-stone-700/50">
-              <h3 className="text-xl font-medium text-stone-100 mb-4">🍻 Restauranter i området</h3>
-              <div className="grid md:grid-cols-2 gap-4">
-                {trip.restaurants.map((restaurant, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-amber-400">•</span>
-                    <div>
-                      <span className="text-stone-300">{restaurant.name}</span>
-                      <span className="text-stone-500 text-sm block">{restaurant.description}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </section>
 
@@ -652,9 +801,9 @@ function CourseCard({
             </div>
             
             {/* Tee Time - on its own row for visibility */}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-stone-500 text-xs">Tee time:</span>
-              <span className={`text-sm font-medium ${course.teeTime === 'TBC' ? 'text-amber-400' : 'text-emerald-400'}`}>
+            <div className="flex items-start gap-2 mt-2">
+              <span className="text-stone-500 text-xs mt-0.5">Tee time:</span>
+              <span className={`text-sm font-medium whitespace-pre-line ${course.teeTime === 'TBC' || course.teeTime?.includes('*') ? 'text-amber-400' : 'text-emerald-400'}`}>
                 {course.teeTime || 'TBC'}
               </span>
             </div>
@@ -764,10 +913,9 @@ function DinnerCard({ day }: { day: DaySchedule }) {
     <div className={`bg-gradient-to-br ${colors.gradient} rounded-3xl p-8 border ${colors.border}`}>
       <div className="flex items-center gap-3 mb-6">
         <div className="w-12 h-12 bg-stone-900/50 rounded-xl flex items-center justify-center text-2xl">{colors.icon}</div>
-        <div>
-          <div className="text-stone-500 text-sm">{day.dayName} kveld</div>
-          <div className="text-stone-100 font-medium">{day.title}</div>
-        </div>
+<div>
+  <div className="text-stone-100 font-medium">{day.dayName} kveld</div>
+</div>
       </div>
       <div className="space-y-3">
         <p className="text-stone-300">{day.dinner.description}</p>
@@ -777,6 +925,134 @@ function DinnerCard({ day }: { day: DaySchedule }) {
         <div className={`flex items-center gap-2 ${colors.text}`}>
           <span>👨‍🍳</span>
           <span className="font-medium">Kokk{day.dinner.chefs.length > 1 ? 'er' : ''}: {day.dinner.chefs.join(' & ')}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Transport Schedule Component
+function TransportSchedule({ transport }: { transport: Transport }) {
+  const dayNames: Record<string, string> = {
+    '27': 'Torsdag 27. Aug',
+    '28': 'Fredag 28. Aug',
+    '29': 'Lørdag 29. Aug',
+    '30': 'Søndag 30. Aug',
+  }
+
+  // Group legs by date
+  const legsByDate = transport.legs.reduce((acc, leg) => {
+    if (!acc[leg.date]) acc[leg.date] = []
+    acc[leg.date].push(leg)
+    return acc
+  }, {} as Record<string, typeof transport.legs>)
+
+  return (
+    <div className="space-y-8">
+      {Object.entries(legsByDate).map(([date, legs]) => (
+        <div key={date} className="bg-stone-800/50 rounded-2xl border border-stone-700/50 overflow-hidden">
+          <div className="bg-stone-800 px-6 py-4 border-b border-stone-700/50">
+            <h3 className="text-lg font-medium text-stone-100">{dayNames[date] || `Aug ${date}`}</h3>
+          </div>
+          
+          <div className="divide-y divide-stone-700/30">
+            {legs.map((leg, idx) => (
+              <div key={idx} className="p-4 md:p-6">
+                {/* Top row: Time and Route */}
+                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                  {/* Time badge */}
+                  <div className={`
+                    inline-flex items-center px-3 py-1.5 rounded-lg text-sm font-medium w-fit
+                    ${leg.confirmed 
+                      ? 'bg-emerald-900/30 text-emerald-400 border border-emerald-800/30' 
+                      : 'bg-amber-900/30 text-amber-400 border border-amber-800/30'}
+                  `}>
+                    {leg.time}
+                  </div>
+                  
+                  {/* Route */}
+                  <div className="flex items-center gap-2 text-stone-200 flex-1 min-w-0">
+                    <span className="font-medium truncate">{leg.from}</span>
+                    <svg className="w-4 h-4 text-stone-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                    <span className="font-medium truncate">{leg.to}</span>
+                  </div>
+
+                  {/* Cost badge (if present) */}
+                  {leg.cost && (
+                    <div className="inline-flex items-center px-3 py-1.5 bg-blue-900/30 text-blue-400 border border-blue-800/30 rounded-lg text-sm font-medium w-fit">
+                      {leg.cost}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Details row */}
+                {(leg.provider || leg.vehicleType || leg.contact || leg.notes) && (
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 mt-3 text-sm text-stone-400">
+                    {leg.provider && (
+                      <span className="flex items-center gap-1.5">
+                        <span>🏢</span> {leg.provider}
+                      </span>
+                    )}
+                    {leg.vehicleType && (
+                      <span className="flex items-center gap-1.5">
+                        <span>🚐</span> {leg.vehicleType}
+                      </span>
+                    )}
+                    {leg.contact && (
+                      <span className="flex items-center gap-1.5">
+                        <span>📞</span> {leg.contact}
+                      </span>
+                    )}
+                    {leg.notes && (
+                      <span className="italic text-stone-500">{leg.notes}</span>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Expenses Display Component
+function ExpensesDisplay({ expenses }: { expenses: { description: string; amount: number; paidBy: string; date?: string }[] }) {
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
+  const perPerson = totalExpenses / 8
+
+  return (
+    <div className="bg-stone-900/50 rounded-3xl border border-stone-700/50 overflow-hidden">
+      {expenses.map((expense, index) => (
+        <div 
+          key={index} 
+          className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 gap-3 ${index !== expenses.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+        >
+          <div className="flex-1">
+            <p className="text-stone-100 font-medium">{expense.description}</p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-stone-400">
+              <span>Betalt av: {expense.paidBy}</span>
+              {expense.date && <span>{new Date(expense.date).toLocaleDateString('nb-NO')}</span>}
+            </div>
+          </div>
+          <div className="text-blue-400 font-semibold text-lg whitespace-nowrap">{expense.amount.toLocaleString('nb-NO')} NOK</div>
+        </div>
+      ))}
+      
+      {/* Total */}
+      <div className="bg-blue-900/30 p-6 border-t border-blue-800/30">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p className="text-stone-100 font-medium text-lg">Totalt betalt</p>
+            <p className="text-stone-500 text-sm">Sum av alle forskuddsbetalinger</p>
+          </div>
+          <div className="text-right">
+            <div className="text-blue-400 font-bold text-2xl">{totalExpenses.toLocaleString('nb-NO')} NOK</div>
+            <div className="text-stone-400 text-sm mt-1">Per person: <span className="font-semibold text-blue-300">{perPerson.toLocaleString('nb-NO')} NOK</span></div>
+          </div>
         </div>
       </div>
     </div>
