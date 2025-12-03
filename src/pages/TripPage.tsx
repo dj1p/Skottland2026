@@ -555,13 +555,13 @@ export default function TripPage({ trip }: TripPageProps) {
                 {trip.costs.map((cost, i) => (
                   <div 
                     key={i} 
-                    className={`flex items-center justify-between p-6 ${i !== trip.costs!.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+                    className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-6 ${i !== trip.costs!.length - 1 ? 'border-b border-stone-700/30' : ''}`}
                   >
-                    <div>
+                    <div className="flex-1">
                       <p className="text-stone-100 font-medium">{cost.item}</p>
                       {cost.note && <p className="text-stone-500 text-sm">{cost.note}</p>}
                     </div>
-                    <div className="text-emerald-400 font-semibold text-lg">{cost.amount}</div>
+                    <div className="text-emerald-400 font-semibold text-lg whitespace-nowrap">{cost.amount}</div>
                   </div>
                 ))}
                 
