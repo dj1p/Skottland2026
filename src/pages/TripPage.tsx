@@ -546,7 +546,7 @@ export default function TripPage({ trip }: TripPageProps) {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <span className="text-amber-400 text-sm tracking-widest uppercase">Økonomi</span>
-              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Kostnader</h2>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Kostnadsestimat</h2>
               <p className="text-stone-400 mt-4">Pris per person</p>
             </div>
 
@@ -570,11 +570,11 @@ export default function TripPage({ trip }: TripPageProps) {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
                       <p className="text-stone-100 font-medium">Totalt estimat</p>
-                      <p className="text-stone-500 text-sm">Golf: £340 + Hus: 5 213 NOK + Mat: ca 500 NOK</p>
+                      <p className="text-stone-500 text-sm">Greenfees: 3 886 NOK + Hus: 5 213 NOK + Mat: ca 600 NOK</p>
                     </div>
                     <div className="text-right">
-                      <div className="text-emerald-400 font-bold text-xl">~10 500 NOK</div>
-                      <div className="text-stone-500 text-xs">vs 2024: 13 130 NOK</div>
+                      <div className="text-emerald-400 font-bold text-xl">~10 000 NOK</div>
+                      <div className="text-stone-500 text-xs">vs 2024: 13 900 NOK (inkl mat&drikke)</div>
                     </div>
                   </div>
                 </div>
