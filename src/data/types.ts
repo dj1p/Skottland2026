@@ -23,18 +23,7 @@ export interface GolfCourse {
   teeTime?: string // e.g. "09:00" or "TBC"
   websiteUrl?: string
   photos?: Photo[]
-}
-export interface Expense {
-  description: string;
-  amount: number;
-  paidBy: string;
-  date?: string;
-}
 
-export interface Trip {
-  // ... existing fields
-  expenses?: Expense[];
-}
 export interface Activity {
   icon: string
   title: string
@@ -93,6 +82,14 @@ export interface TripInfo {
   days: number
   rounds: number
 }
+  
+export interface Expense {
+  description: string;
+  amount: number;
+  paidBy: string;
+  date?: string;
+}
+
 
 export interface Trip {
   year: number
