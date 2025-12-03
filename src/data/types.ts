@@ -24,7 +24,17 @@ export interface GolfCourse {
   websiteUrl?: string
   photos?: Photo[]
 }
+export interface Expense {
+  description: string;
+  amount: number;
+  paidBy: string;
+  date?: string;
+}
 
+export interface Trip {
+  // ... existing fields
+  expenses?: Expense[];
+}
 export interface Activity {
   icon: string
   title: string
