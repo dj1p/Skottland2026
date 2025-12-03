@@ -341,9 +341,10 @@ transport: {
   // ===========================================================================
   costs: [
     { item: 'Overnatting (Airlie House)', amount: '5 213 NOK', note: '41 700 NOK / 8 personer' },
-    { item: 'Transport', amount: 'TBA', note: '' },
-    { item: 'Montrose Links (1562 + Broomfield)', amount: '£160', note: '+ £35 buggy' },
-    { item: 'Brechin GC (36 hull)', amount: '£70', note: '+ £40 buggy' },
-    { item: 'Forfar GC', amount: 'TBA', note: '' },
+    { item: 'Transport', amount: '1160 NOK', note: 'T/r Flyplass + Golf transfer Lør/Søn' },
+    { item: 'Mat', amount: 'ca 600 NOK', note: 'Inkl Frokost&Middag' },
+    { item: 'Montrose Links (1562 + Broomfield)', amount: '2 151 NOK', note: '+ 470 NOK buggy hele dagen' },
+    { item: 'Brechin GC (36 hull)', amount: '945 NOK', note: '+ 535 NOK buggy hele dagen' },
+    { item: 'Forfar GC', amount: '790 NOK', note: '+ 650 NOK buggy' },
   ],
 }
