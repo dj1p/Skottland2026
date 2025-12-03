@@ -570,10 +570,10 @@ export default function TripPage({ trip }: TripPageProps) {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
                       <p className="text-stone-100 font-medium">Totalt estimat</p>
-                      <p className="text-stone-500 text-sm">Greenfees: 3 886 NOK + Hus: 5 213 NOK + Mat: ca 600 NOK</p>
+                      <p className="text-stone-500 text-sm">-</p>
                     </div>
                     <div className="text-right">
-                      <div className="text-emerald-400 font-bold text-xl">~10 000 NOK</div>
+                      <div className="text-emerald-400 font-bold text-xl">~11 000 NOK</div>
                       <div className="text-stone-500 text-xs">vs 2024: 13 900 NOK (inkl mat&drikke)</div>
                     </div>
                   </div>
