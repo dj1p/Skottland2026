@@ -131,6 +131,13 @@ export const trip2026: Trip = {
             { src: '/images/montrose1562---2.jpeg', alt: 'Montrose 1562', caption: 'Kystlinje' },
             { src: '/images/montrose1562---3.jpeg', alt: 'Montrose 1562', caption: 'Fairway' },
           ],
+          teamLineup: {
+            format: 'individual',
+            foursomes: [
+              { foursome: 'Flight 1', players: ['Klaus', 'Ruben', 'Bjørn', 'Dag'] },
+              { foursome: 'Flight 2', players: ['Sigbjørn', 'Truls', 'Tor Espen', 'Roar'] },
+            ],
+          },
         },
         {
           name: 'Montrose Broomfield Course',
@@ -150,6 +157,15 @@ export const trip2026: Trip = {
             { src: '/images/montrose-broomfield-2.jpg', alt: 'Broomfield', caption: 'Utfordrende greens' },
             { src: '/images/montrose-broomfield-3.jpg', alt: 'Broomfield', caption: 'Links terreng' },
           ],
+          teamLineup: {
+            format: 'scramble',
+            teams: [
+              { team: 'Lag 1', player1: 'Klaus', player2: 'Tor Espen', hc1: 18.1, hc2: 28, groupHC: 10.5 },
+              { team: 'Lag 2', player1: 'Ruben', player2: 'Bjørn', hc1: 11, hc2: 23.8, groupHC: 7.4 },
+              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Dag', hc1: 20.2, hc2: 19.4, groupHC: 9.8 },
+              { team: 'Lag 4', player1: 'Truls', player2: 'Roar', hc1: 36, hc2: 25.9, groupHC: 14.5 },
+            ],
+          },
         },
       ],
       dinner: {
@@ -191,6 +207,13 @@ export const trip2026: Trip = {
                         { src: '/images/Brechin - 5.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
                         { src: '/images/Brechin - 6.jpg', alt: 'Brechin GC', caption: 'James Braid design' },
           ],
+          teamLineup: {
+            format: 'individual',
+            foursomes: [
+              { foursome: 'Flight 1', players: ['Klaus', 'Sigbjørn', 'Tor Espen', 'Truls'] },
+              { foursome: 'Flight 2', players: ['Ruben', 'Bjørn', 'Dag', 'Roar'] },
+            ],
+          },
         },
         {
           name: 'Brechin Golf Club (Runde 2)',
@@ -202,6 +225,15 @@ export const trip2026: Trip = {
           timeOfDay: 'afternoon',
           teeTime: 'Fleksibel.\nKan spille når vi er klare.',
           websiteUrl: 'http://brechingolfclub.co.uk/',
+          teamLineup: {
+            format: 'scramble',
+            teams: [
+              { team: 'Lag 1', player1: 'Klaus', player2: 'Dag', hc1: 18.1, hc2: 19.4, groupHC: 9.2 },
+              { team: 'Lag 2', player1: 'Ruben', player2: 'Roar', hc1: 11, hc2: 25.9, groupHC: 7.7 },
+              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Tor Espen', hc1: 20.2, hc2: 28, groupHC: 11.3 },
+              { team: 'Lag 4', player1: 'Bjørn', player2: 'Truls', hc1: 23.8, hc2: 36, groupHC: 13.7 },
+            ],
+          },
         },
       ],
       dinner: {
@@ -241,6 +273,13 @@ export const trip2026: Trip = {
             { src: '/images/forfar1.jpg', alt: 'Forfar GC', caption: 'Old Tom Morris design' },
             { src: '/images/forfar2.jpg', alt: 'Forfar GC', caption: 'Parkland klassiker' },
           ],
+          teamLineup: {
+            format: 'individual',
+            foursomes: [
+              { foursome: 'Flight 1', players: ['Klaus', 'Ruben', 'Truls', 'Roar'] },
+              { foursome: 'Flight 2', players: ['Sigbjørn', 'Bjørn', 'Dag', 'Tor Espen'] },
+            ],
+          },
         },
       ],
     },
