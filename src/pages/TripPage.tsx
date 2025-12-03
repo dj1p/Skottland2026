@@ -10,6 +10,7 @@ export default function TripPage({ trip }: TripPageProps) {
   const [expandedDay, setExpandedDay] = useState<string | null>(null)
   const [expandedCourse, setExpandedCourse] = useState<string | null>(null)
   const [expandedActivity, setExpandedActivity] = useState<string | null>(null)
+  const [expandedTeamLineup, setExpandedTeamLineup] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [touchStart, setTouchStart] = useState<number | null>(null)
@@ -124,6 +125,14 @@ export default function TripPage({ trip }: TripPageProps) {
     setTimeout(() => {
       window.scrollTo(0, scrollY)
     }, 50)
+  }
+
+  const toggleTeamLineup = (courseName: string) => {
+    const scrollY = window.scrollY
+    setExpandedTeamLineup(expandedTeamLineup === courseName ? null : courseName)
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollY)
+    })
   }
 
   const colorClasses = {
@@ -405,6 +414,8 @@ export default function TripPage({ trip }: TripPageProps) {
             onToggle={() => toggleCourse(course.name)}
             onPhotoClick={openLightbox}
             color={day.color}
+            isTeamLineupExpanded={expandedTeamLineup === course.name}
+            onTeamLineupToggle={() => toggleTeamLineup(course.name)}
           />
         ))}
       </div>
@@ -751,13 +762,17 @@ function CourseCard({
   isExpanded, 
   onToggle, 
   onPhotoClick,
-  color 
+  color,
+  isTeamLineupExpanded,
+  onTeamLineupToggle
 }: { 
   course: GolfCourse
   isExpanded: boolean
   onToggle: () => void
   onPhotoClick: (photo: Photo) => void
   color: string
+  isTeamLineupExpanded: boolean
+  onTeamLineupToggle: () => void
 }) {
   const colorMap: Record<string, { text: string; bg: string; border: string }> = {
     amber: { text: 'text-amber-400', bg: 'bg-amber-900/20', border: 'border-amber-800/30' },
@@ -888,6 +903,64 @@ function CourseCard({
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
               </a>
+            )}
+
+            {/* Team Lineup Button */}
+            {course.teamLineup && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onTeamLineupToggle(); }}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${colors.bg} ${colors.border} border hover:bg-white/5 transition-colors text-sm font-medium ${colors.text}`}
+              >
+                <span>👥 Lagoppsett</span>
+                <svg className={`w-4 h-4 transition-transform ${isTeamLineupExpanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+            )}
+
+            {/* Team Lineup Display */}
+            {course.teamLineup && isTeamLineupExpanded && (
+              <div className={`mt-4 p-4 ${colors.bg} rounded-xl border ${colors.border}`}>
+                {course.teamLineup.format === 'scramble' && course.teamLineup.teams && (
+                  <div className="space-y-3">
+                    <h5 className={`font-medium ${colors.text} mb-3`}>🏆 Scramble-lag</h5>
+                    {course.teamLineup.teams.map((team, idx) => (
+                      <div key={idx} className="bg-stone-900/50 rounded-lg p-3 border border-stone-700/30">
+                        <div className="font-medium text-stone-200 mb-2">{team.team}</div>
+                        <div className="grid grid-cols-2 gap-2 text-sm">
+                          <div className="text-stone-300">
+                            {team.player1} <span className="text-stone-500">(HC {team.hc1})</span>
+                          </div>
+                          <div className="text-stone-300">
+                            {team.player2} <span className="text-stone-500">(HC {team.hc2})</span>
+                          </div>
+                        </div>
+                        <div className={`mt-2 pt-2 border-t border-stone-700/30 text-sm ${colors.text}`}>
+                          Gruppe HC: <span className="font-semibold">{team.groupHC}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {course.teamLineup.format === 'individual' && course.teamLineup.foursomes && (
+                  <div className="space-y-3">
+                    <h5 className={`font-medium ${colors.text} mb-3`}>⛳ Individual play</h5>
+                    {course.teamLineup.foursomes.map((foursome, idx) => (
+                      <div key={idx} className="bg-stone-900/50 rounded-lg p-3 border border-stone-700/30">
+                        <div className="font-medium text-stone-200 mb-2">{foursome.foursome}</div>
+                        <div className="flex flex-wrap gap-2">
+                          {foursome.players.map((player, pidx) => (
+                            <span key={pidx} className="px-3 py-1 bg-stone-800/50 rounded-full text-sm text-stone-300">
+                              {player}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
