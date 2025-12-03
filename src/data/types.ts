@@ -7,6 +7,25 @@ export interface Photo {
   alt: string
   caption?: string
 }
+export interface TeamPairing {
+  team: string
+  player1: string
+  player2: string
+  hc1: number
+  hc2: number
+  groupHC: number
+}
+
+export interface Foursome {
+  foursome: string
+  players: string[]
+}
+
+export interface TeamLineup {
+  format: 'scramble' | 'individual'
+  teams?: TeamPairing[]      // For scramble
+  foursomes?: Foursome[]      // For individual play
+}
 
 export interface GolfCourse {
   name: string
@@ -23,6 +42,7 @@ export interface GolfCourse {
   teeTime?: string // e.g. "09:00" or "TBC"
   websiteUrl?: string
   photos?: Photo[]
+  teamLineup?: TeamLineup
 }
 
 export interface Expense {
