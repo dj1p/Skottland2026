@@ -257,13 +257,13 @@ export default function TripPage({ trip }: TripPageProps) {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-start md:justify-center h-14 overflow-x-auto scrollbar-hide">
             <div className="flex gap-4 md:gap-8 text-sm whitespace-nowrap">
-              {['accommodation', 'schedule', 'food', 'transport', 'costs', 'photos'].map((id) => (
+              {['accommodation', 'schedule', 'food', 'transport', 'expenses', 'costs', 'photos'].map((id) => (
                 <button
                   key={id}
                   onClick={() => scrollToSection(id)}
                   className="text-stone-400 hover:text-stone-200 transition-colors px-1"
                 >
-{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : id === 'transport' ? 'Transport' : 'Kostnader'}
+{id === 'accommodation' ? 'Overnatting' : id === 'schedule' ? 'Program' : id === 'photos' ? 'Bilder' : id === 'food' ? 'Mat' : id === 'transport' ? 'Transport' : id === 'expenses' ? 'Utgifter' : 'Kostnader'}
                 </button>
               ))}
             </div>
@@ -522,6 +522,24 @@ export default function TripPage({ trip }: TripPageProps) {
           )}
         </div>
       </section>
+
+      {/* Expenses Section */}
+      {trip.expenses && trip.expenses.length > 0 && (
+        <section id="expenses" className="py-24 bg-stone-900">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="text-center mb-16">
+              <span className="text-blue-400 text-sm tracking-widest uppercase">Utgifter</span>
+              <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Forskuddsbetalinger</h2>
+              <p className="text-stone-400 mt-4">Betalt før turen</p>
+            </div>
+
+            <div className="max-w-2xl mx-auto">
+              <ExpensesDisplay expenses={trip.expenses} />
+            </div>
+          </div>
+        </section>
+      )}
+
 {/* Costs Section */}
       {trip.costs && trip.costs.length > 0 && (
         <section id="costs" className="py-24 bg-stone-800">
@@ -997,6 +1015,46 @@ function TransportSchedule({ transport }: { transport: Transport }) {
           </div>
         </div>
       ))}
+    </div>
+  )
+}
+
+// Expenses Display Component
+function ExpensesDisplay({ expenses }: { expenses: { description: string; amount: number; paidBy: string; date?: string }[] }) {
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
+  const perPerson = totalExpenses / 8
+
+  return (
+    <div className="bg-stone-900/50 rounded-3xl border border-stone-700/50 overflow-hidden">
+      {expenses.map((expense, index) => (
+        <div 
+          key={index} 
+          className={`flex flex-col sm:flex-row sm:items-center justify-between p-6 gap-3 ${index !== expenses.length - 1 ? 'border-b border-stone-700/30' : ''}`}
+        >
+          <div className="flex-1">
+            <p className="text-stone-100 font-medium">{expense.description}</p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-stone-400">
+              <span>Betalt av: {expense.paidBy}</span>
+              {expense.date && <span>{new Date(expense.date).toLocaleDateString('nb-NO')}</span>}
+            </div>
+          </div>
+          <div className="text-blue-400 font-semibold text-lg whitespace-nowrap">{expense.amount.toLocaleString('nb-NO')} NOK</div>
+        </div>
+      ))}
+      
+      {/* Total */}
+      <div className="bg-blue-900/30 p-6 border-t border-blue-800/30">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <p className="text-stone-100 font-medium text-lg">Totalt betalt</p>
+            <p className="text-stone-500 text-sm">Sum av alle forskuddsbetalinger</p>
+          </div>
+          <div className="text-right">
+            <div className="text-blue-400 font-bold text-2xl">{totalExpenses.toLocaleString('nb-NO')} NOK</div>
+            <div className="text-stone-400 text-sm mt-1">Per person: <span className="font-semibold text-blue-300">{perPerson.toLocaleString('nb-NO')} NOK</span></div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
