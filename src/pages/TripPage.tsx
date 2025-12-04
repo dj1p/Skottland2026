@@ -506,7 +506,7 @@ export default function TripPage({ trip }: TripPageProps) {
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
             <span className="text-rose-400 text-sm tracking-widest uppercase">Kulinarisk</span>
-            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Mat & Drikke</h2>
+            <h2 className="text-4xl md:text-5xl font-light text-stone-100 mt-4">Mat</h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
@@ -585,7 +585,7 @@ export default function TripPage({ trip }: TripPageProps) {
                     </div>
                     <div className="text-right">
                       <div className="text-emerald-400 font-bold text-xl">~11 000 NOK</div>
-                      <div className="text-stone-500 text-xs">vs 2024: 13 900 NOK (inkl mat&drikke)</div>
+                      <div className="text-stone-500 text-xs">vs 2024: 13 900 NOK (inkl mat)</div>
                     </div>
                   </div>
                 </div>
