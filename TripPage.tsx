@@ -569,8 +569,8 @@ export default function TripPage({ trip }: TripPageProps) {
                 <div className="bg-emerald-900/30 p-6 border-t border-emerald-800/30">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                     <div>
-                      <p className="text-stone-100 font-medium">Totalt estimat</p>
-                      <p className="text-stone-500 text-sm">Golf: £340 + Hus: 5 213 NOK + Mat: ca 500 NOK</p>
+                      <p className="text-stone-100 font-medium">Totalt estimat p.p</p>
+                      <p className="text-stone-500 text-sm">Golf: 3 900 NOK + Hus: 5 213 NOK + Mat: ca 500 NOK + Transport: ca 1000 NOK</p>
                     </div>
                     <div className="text-right">
                       <div className="text-emerald-400 font-bold text-xl">~10 500 NOK</div>
