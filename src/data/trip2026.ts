@@ -19,6 +19,16 @@ export const trip2026: Trip = {
     days: 4,
     rounds: 5,
   },
+  
+  // HANDICAPS 2026 (oppdatert)
+  // Klaus: 18.1
+  // Charlie: TBD (erstatter Ruben) - OPPDATER DETTE!
+  // Sigbjørn: 23.8 (oppdatert fra 20.2)
+  // Bjørn: 23.8
+  // Truls: 36
+  // Tor Espen: 28
+  // Dag: 19.4
+  // Roar: 25.9
 
   // ===========================================================================
   // OVERNATTING
@@ -134,7 +144,7 @@ export const trip2026: Trip = {
           teamLineup: {
             format: 'individual',
             foursomes: [
-              { foursome: 'Flight 1', players: ['Klaus', 'Ruben', 'Bjørn', 'Dag'] },
+              { foursome: 'Flight 1', players: ['Klaus', 'Charlie', 'Bjørn', 'Dag'] },
               { foursome: 'Flight 2', players: ['Sigbjørn', 'Truls', 'Tor Espen', 'Roar'] },
             ],
           },
@@ -161,8 +171,8 @@ export const trip2026: Trip = {
             format: 'scramble',
             teams: [
               { team: 'Lag 1', player1: 'Klaus', player2: 'Tor Espen', hc1: 18.1, hc2: 28, groupHC: 10.5 },
-              { team: 'Lag 2', player1: 'Ruben', player2: 'Bjørn', hc1: 11, hc2: 23.8, groupHC: 7.4 },
-              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Dag', hc1: 20.2, hc2: 19.4, groupHC: 9.8 },
+              { team: 'Lag 2', player1: 'Charlie', player2: 'Bjørn', hc1: 11.0, hc2: 23.8, groupHC: 7.4 }, // Charlie HC = TBD, oppdater!
+              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Dag', hc1: 23.8, hc2: 19.4, groupHC: 10.4 },
               { team: 'Lag 4', player1: 'Truls', player2: 'Roar', hc1: 36, hc2: 25.9, groupHC: 14.5 },
             ],
           },
@@ -211,7 +221,7 @@ export const trip2026: Trip = {
             format: 'individual',
             foursomes: [
               { foursome: 'Flight 1', players: ['Klaus', 'Sigbjørn', 'Tor Espen', 'Truls'] },
-              { foursome: 'Flight 2', players: ['Ruben', 'Bjørn', 'Dag', 'Roar'] },
+              { foursome: 'Flight 2', players: ['Charlie', 'Bjørn', 'Dag', 'Roar'] },
             ],
           },
         },
@@ -229,8 +239,8 @@ export const trip2026: Trip = {
             format: 'scramble',
             teams: [
               { team: 'Lag 1', player1: 'Klaus', player2: 'Dag', hc1: 18.1, hc2: 19.4, groupHC: 9.2 },
-              { team: 'Lag 2', player1: 'Ruben', player2: 'Roar', hc1: 11, hc2: 25.9, groupHC: 7.7 },
-              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Tor Espen', hc1: 20.2, hc2: 28, groupHC: 11.3 },
+              { team: 'Lag 2', player1: 'Charlie', player2: 'Roar', hc1: 11.0, hc2: 25.9, groupHC: 7.7 }, // Charlie HC = TBD, oppdater!
+              { team: 'Lag 3', player1: 'Sigbjørn', player2: 'Tor Espen', hc1: 23.8, hc2: 28, groupHC: 12.5 },
               { team: 'Lag 4', player1: 'Bjørn', player2: 'Truls', hc1: 23.8, hc2: 36, groupHC: 13.7 },
             ],
           },
@@ -276,7 +286,7 @@ export const trip2026: Trip = {
           teamLineup: {
             format: 'individual',
             foursomes: [
-              { foursome: 'Flight 1', players: ['Klaus', 'Ruben', 'Truls', 'Roar'] },
+              { foursome: 'Flight 1', players: ['Klaus', 'Charlie', 'Truls', 'Roar'] },
               { foursome: 'Flight 2', players: ['Sigbjørn', 'Bjørn', 'Dag', 'Tor Espen'] },
             ],
           },
@@ -380,7 +390,8 @@ transport: {
   // ===========================================================================
   costs: [
     { item: 'Overnatting (Airlie House)', amount: '5 213 NOK', note: '41 700 NOK / 8 personer' },
-    { item: 'Transport', amount: '1160 NOK', note: 'T/r Flyplass + Golf transfer Lør/Søn' },
+    { item: 'Transport - Flyplass', amount: '574 NOK', note: 'T/r Flyplass (7 personer - Charlie trenger ikke transport)' },
+    { item: 'Transport - Golf', amount: '435 NOK', note: 'T/R Golfbaner Fredag/Søndag' },
     { item: 'Mat', amount: 'ca 600 NOK', note: 'Inkl Frokost&Middag' },
     { item: 'Montrose Links (1562 + Broomfield)', amount: '2 151 NOK', note: '+ 470 NOK buggy hele dagen' },
     { item: 'Brechin GC (36 hull)', amount: '945 NOK', note: '+ 535 NOK buggy hele dagen' },
